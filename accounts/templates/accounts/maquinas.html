@@ -1,0 +1,34 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h5>Lista de máquinas</h5>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+							<th>Nombre de la máquina</th>
+							<th>Estado</th>
+							<th>Categoría</th>
+						</tr>
+
+						{% for i in lista_maquinas %}
+							<tr>
+								<td><a href="{% url 'maquinas' i.nombre_maquina %}"> {{i.nombre_maquina}}</a></td>
+								<td>{{i.estado}}</td>
+								<td>{{i.categoria}}</td>
+							</tr>
+						{% endfor %}
+						
+					</table>
+				</div>
+			</div>
+			
+		</div>
+
+{% endblock content %}

@@ -1,3 +1,4 @@
+from enum import unique
 from random import choices
 from unicodedata import category
 from django.db import models
@@ -18,10 +19,12 @@ class Usuario(models.Model):
 
 class Maquina(models.Model):
 
-    ESTADO = (('Encendida', 'Apagada'),)
+    ESTADO = (
+        ('Encendida', 'Apagada'),
+    )
     
-
-    nombre_maquina = models.CharField(max_length=30, null=True)
+    nombre_creador = models.ForeignKey(Usuario, null= True, on_delete=models.SET_NULL)
+    nombre_maquina = models.CharField(max_length=30, null=True, unique=True)
     estado = models.CharField(max_length=30, null=True, choices = ESTADO)
     categoria = models.CharField(max_length=30, null=True)
     descripcion = models.CharField(max_length=200, null=True)
