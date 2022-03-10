@@ -5,5 +5,5 @@ from django.contrib import admin
 from .models import *
 
 #aqui ponemos lo que queremos que se vea en el admin panel de la base de datos
-admin.site.register(Usuario)
+admin.site.register(Alumno)
 admin.site.register(Maquina)

@@ -4,11 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm  
 from django.contrib.auth import authenticate,login,logout
 
+
 from django.contrib.auth.decorators import login_required # lo usamos para los decorators, para que no se pueda acceder a diferentes paginas sin estar loggeado
 
 # Create your views here.
 from .models import *
 from .forms import CreateUserForm
+from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
 
 def home(request):
 	messages.warning(request, 'Your account expires in three days.')
@@ -26,6 +28,7 @@ def maquinas(request, pk_maquina):
 	contexto = {'lista_maquinas':maquinas} 						#este es el diccionario que le pasamos a la url 
 	return render(request, 'accounts/maquinas.html',contexto)
 
+#@unauthenticathed_user
 def loginUsername(request):
 
 	contexto={}
@@ -50,18 +53,19 @@ def logoutUser(request):
 
 def registrarse(request):
 
-	if request.user.is_authenticated: #esto se usa para comprobar que si está autentificado no pueda acceder a registrarse
-		return redirect('home')
-	else:
-		form = CreateUserForm()
+	#if request.user.is_authenticated: #esto se usa para comprobar que si está autentificado no pueda acceder a registrarse
+	#	return redirect('home')
+	#else:
+	form = CreateUserForm()
+	contexto = {'form':form}
 		
-		if request.method == 'POST':
-			form = CreateUserForm(request.POST)
-			if form.is_valid():
-				form.save()
-				redirect('login')
+	if request.method == 'POST':
+		form = CreateUserForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return render(request, 'accounts/login.html', contexto)
 					
 			
 
-		contexto = {'form':form}
-		return render(request, 'accounts/registrarse.html', contexto)
+	
+	return render(request, 'accounts/registrarse.html', contexto)
