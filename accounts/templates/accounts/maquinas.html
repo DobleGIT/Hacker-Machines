@@ -15,15 +15,25 @@
 							<th>Nombre de la máquina</th>
 							<th>Estado</th>
 							<th>Categoría</th>
+							<th>Dirección IP</th>
 						</tr>
-
-						{% for i in lista_maquinas %}
-							<tr>
-								<td><a href="{% url 'maquinas' i.nombre_maquina %}"> {{i.nombre_maquina}}</a></td>
-								<td>{{i.estado}}</td>
-								<td>{{i.categoria}}</td>
+						{% if lista_maquinas %}
+							{% for i in lista_maquinas %}
+								<tr>
+									<td><a href="{% url 'maquinas' i.nombre_maquina %}"> {{i.nombre_maquina}}</a></td>
+									<td>{{i.estado}}</td>
+									<td>{{i.categoria}}</td>
+									<td>{{i.ip}}</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+						    <tr>
+								<a> Esto es una mierda para probar que se puede acceder a una sola máquina :)</a>
+								<td><a href="#"> {{maquina_individual.nombre_maquina}}</a></td>
+								<td>{{maquina_individual.estado}}</td>
+								
 							</tr>
-						{% endfor %}
+						{% endif %}
 						
 					</table>
 				</div>
