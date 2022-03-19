@@ -44,5 +44,6 @@ https://www.tutorialrepublic.com/codelab.php?topic=bootstrap-3&file=simple-login
 https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=simple-login-form
 
 https://www.tutorialrepublic.com/codelab.php?topic=bootstrap-3&file=simple-login-form
-
+https://bbbootstrap.com/snippets/bootstrap-5-myprofile-90806631
+https://www.bootdey.com/snippets/view/bs5-edit-profile-account-details
 

@@ -1,24 +1,21 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm  
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
-
 from django.contrib.auth.models import User
-
-
 from django.contrib.auth.decorators import login_required # lo usamos para los decorators, para que no se pueda acceder a diferentes paginas sin estar loggeado
 
 # Create your views here.
 from .models import *
-from .forms import CreateUserForm
+from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm  
 from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
 
 def home(request):
-	messages.warning(request, 'Your account expires in three days.')
+	#messages.warning(request, 'Your account expires in three days.')
 	return render(request, 'accounts/home.html')
 
-@login_required(login_url='login') #comprobamos que esté loggeado
+@login_required(login_url='login') #comprobamos que esté loggeado y si no es así se le manda al /login
 def dashboard(request):
 	current_user = request.user
 	#current_alumno = User.objects.get()
@@ -28,6 +25,29 @@ def dashboard(request):
 
 
 	return render(request, 'accounts/dashboard.html',context)
+
+
+@login_required(login_url='login') #comprobamos que esté loggeado y si no es así se le manda al /login
+def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ90L5jfldw&ab_channel=CoreySchafer
+
+	
+	# lo que hacemos aqui es crear dos forms que saquen solo el email y la foto de perfil en caso de que no sea POST y en caso de que lo sea see guardan los forms
+	if request.method == 'POST': #creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
+		alumno_form = AlumnoUpdateForm(request.POST, request.FILES, instance = request.user.alumno)
+		user_form = UserUpdateForm(request.POST, instance=request.user)
+		
+		if user_form.is_valid() and alumno_form.is_valid():
+			user_form.save()
+			alumno_form.save()
+			messages.success(request, f'Se ha actualizado tu perfil')
+			return redirect('profile')
+	else:
+		alumno_form = AlumnoUpdateForm(instance = request.user.alumno)		#creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
+		user_form = UserUpdateForm(instance = request.user)
+	
+	context={'alumno_form':alumno_form, 'user_form':user_form}
+	return render(request, 'accounts/profile.html',context)
+
 
 @login_required(login_url='login')
 def maquinas(request, pk_maquina=None):
@@ -64,7 +84,7 @@ def loginUsername(request):
 	
 	return render(request, 'accounts/login.html',contexto)
 
-def logoutUser(request):
+def logoutUser(request):	#cuando el usuario pulsa el boton de logout se le direcciona a la pagina /logout que llama al metodo logout para hacer el que? pues si, el logout
 	logout(request)
 	return redirect('login')
 

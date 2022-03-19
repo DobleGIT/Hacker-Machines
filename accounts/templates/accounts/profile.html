@@ -1,0 +1,82 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+
+    {% comment %} {% if request.user.alumno.profile_image.url == NULL %}
+        <img src="{{request.user.alumno.profile_image.url}}">
+    {% else %}
+        <img src="https://illumesense.com/resources/illumesense/style/img/website/profile-picture-blanks/male-profile.jpg">
+    {% endif %} {% endcomment %}
+
+    <div class="container-sm px-1 mt-4">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">Foto de Perfil</div>
+                    
+                    <div class="card-body text-center">
+                        {% if request.user.alumno.profile_image.url != NULL %}
+
+                        <img class="rounded-circle account-img" width="150px" src="{{request.user.alumno.profile_image.url}}">
+                        
+                        {% else %}
+    
+                            <img class="rounded-circle account-img" width="150px" src="https://illumesense.com/resources/illumesense/style/img/website/profile-picture-blanks/male-profile.jpg">
+                        
+                        {% endif %}  
+                        
+                        <h5 class="card-title"> {{request.user.username}}</h5>
+                        
+                        <div class="small font-italic text-muted mb-3">
+                            <span class="text-black-50"> {{request.user.email}}</span> 
+                        </div>
+                        <a href="#" class="card-link mr-3">Cambiar Contraseña FALTA CREARLO</a>
+                        
+                        {% comment %} <button class="btn btn-primary" type="button">Subir una imagen</button> {% endcomment %}
+                    </div>
+                </div>
+            </div>           
+
+            <div class="col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-header">Detalles de la cuenta</div>
+                    <div class="card-body">
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{alumno_form.as_p}}
+                            {{user_form.as_p}}
+                            {% comment %} <div class="mb-3">
+                                
+                                <label class="small mb-1" for="inputUsername">Nombre de Usuario</label>
+                                <input class="form-control" id="inputUsername" type="text" value="{{request.user.username}}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                
+                                <label class="small mb-1" for="inputEmail">Email</label>
+                                <input class="form-control" id="inputEmail" type="text" value="{{request.user.email}}" >
+                            </div>
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputPassword1">Contraseña</label>
+                                <input class="form-control" id="inputPassword1" type="password" placeholder=";)" >
+                            </div>
+                            <div class="mb-3">
+                                <label class="small mb-1" for="inputPassword2">Repite la contraseña</label>
+                                <input class="form-control" id="inputPassword2" type="password" placeholder="Por favor que sea robusta" >
+                            </div> {% endcomment %}
+                            
+                            <!-- Save changes button-->
+                            <button class="btn btn-primary" type="submit">Guardar Cambios</button>
+                            <br><br>
+                            
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            
+            
+        </div>
+    </div>
+    
+{% endblock content %}

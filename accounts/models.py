@@ -3,7 +3,7 @@ from random import choices
 from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import User
-
+from PIL import Image       #Lo usamos para redimensionar la imagen de perfil
 
 # Create your models here.
 # jaimeAdmin
@@ -19,8 +19,20 @@ class Alumno(models.Model):
     profile_image = models.ImageField(null=True, blank = True)
     
 
-    # def __str__(self):
-    #     return self.user
+    def __str__(self):
+        return f'{self.user.username} Alumno'
+
+    # def save(self):           esto es para redimensionar las imagenes que se suben pero no funciona y me da pereza ver el por que
+    #     super().save()
+
+    #     img = Image.open(self.profile_image.path)
+
+    #     if img.height > 300 or img.width < 300:
+    #         output_size = (300,300)
+    #         img.thumbnail(output_size)
+    #         img.save(self.profile_image.path)
+
+
 #cuando se crea un nuevo usuario se llama una señal en signals.py que crea un alumno
 
 class Maquina(models.Model):
