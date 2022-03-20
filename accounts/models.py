@@ -16,7 +16,7 @@ class Alumno(models.Model):
     puntos_conseguidos = models.IntegerField(null=True)
     user_flag = models.IntegerField(null=True)
     root_flag = models.IntegerField(null=True)
-    profile_image = models.ImageField(null=True, blank = True)
+    profile_image = models.ImageField(default='foto_perfil.png')
     
 
     def __str__(self):

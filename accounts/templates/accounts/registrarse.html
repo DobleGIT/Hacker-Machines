@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <html>
 <head>
   <title>Registrarse</title>
@@ -9,33 +10,40 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/registrarse.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <body>
-  <div class="login-form">
-    <form method="POST" action="">
-      {% csrf_token %} 
+
+  <main role="main" class="container">
+		<div class="row">
+			<div class="col">
+				{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{ message.tags }}">
+					{{ message }}
+					</div>
+				{% endfor %}
+				{% endif %}
+				<div class="login-form">
+          <form method="POST" action="">
+            {% csrf_token %} 
+            
+              <h2 class="text-center">Registrarse</h2>       
+                {{form | crispy}}
       
-        <h2 class="text-center">Registrarse</h2>       
+              <div class="form-group">
+                  <br>
+                  <button type="submit" class="btn btn-primary btn-block">Continuar</button>
+              </div>
+                 
+          </form>
+          <p class="text-center"><a href="{%url 'login' %}">¿Ya tienes cuenta?</a></p>
+      </div>
+		  	</div>
+		  
+		</div>
+	</main>
+  
+  
     
 
-        <div class="form-control">
-          {{form.username}}
-        </div>
-        <div class="form-control">
-          {{form.email}}
-        </div>
-        <div class="form-control">
-          {{form.password1}}
-        </div>
-        <div class="form-control">
-          {{form.password2}}
-        </div> 
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block">Log in</button>
-        </div>
-           
-    </form>
-    <p class="text-center"><a href="{%url 'login' %}">¿Ya tienes cuenta?</a></p>
-</div>
 </body>
 </html>
 

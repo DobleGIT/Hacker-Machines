@@ -12,7 +12,7 @@ from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm
 from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
 
 def home(request):
-	#messages.warning(request, 'Your account expires in three days.')
+	
 	return render(request, 'accounts/home.html')
 
 @login_required(login_url='login') #comprobamos que esté loggeado y si no es así se le manda al /login
@@ -66,7 +66,7 @@ def maquinas(request, pk_maquina=None):
 	return render(request, 'accounts/maquinas.html',context)
 
 #@unauthenticathed_user
-def loginUsername(request):
+def loginUsername(request):     #la pagina del login
 
 	contexto={}
 	if request.method == 'POST':
@@ -93,19 +93,19 @@ def registrarse(request):
 	#if request.user.is_authenticated: #esto se usa para comprobar que si está autentificado no pueda acceder a registrarse
 	#	return redirect('home')
 	#else:
-	form = CreateUserForm()
-	contexto = {'form':form}
+	
 		
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)
 		if form.is_valid():
 			user = form.save()
 
-			Alumno.objects.create(user=user)
+			#Alumno.objects.create(user=user)
+			username = form.cleaned_data['username']
+			messages.success(request, f'Usuario {username} creado')
+			return redirect('login')
+	else:
+		form = CreateUserForm()
 
-			return render(request, 'accounts/login.html', contexto)
-					
-			
-
-	
+	contexto = {'form':form}			
 	return render(request, 'accounts/registrarse.html', contexto)

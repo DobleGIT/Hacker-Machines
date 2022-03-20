@@ -7,18 +7,15 @@ from accounts.models import Alumno
 
 
 class CreateUserForm(UserCreationForm): #es una modificacion de Usercreation para poner el email... etcs
-	class Meta:
-		model = User
-		fields = ['username', 'email', 'password1', 'password2']
+    username = forms.CharField(label='Nombre Usuario')
+    email = forms.EmailField(label='Email', required=True)
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput, help_text='La contraseña debe tener mínimo 8 caracteres')
+    password2 = forms.CharField(label='Confirmar Contraseña', widget=forms.PasswordInput)
 
-class ProfileForm(ModelForm): #https://www.youtube.com/watch?v=15UrLdnjlpQ&ab_channel=Codemy.com
-	class Meta:
-		#model = User
-		#fields = ['username', 'email', 'password1', 'password2']
-		model = Alumno
-		fields = '__all__'
-		#exclude = ['maquinas_completadas','puntos_conseguidos','user_flag','root_flag','profile_image']
-		exclude = ['user']
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+
 
 class UserUpdateForm(forms.ModelForm):	#esto lo usamos para poder actualizar el email 
     email = forms.EmailField()
