@@ -14,13 +14,11 @@ class Alumno(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)  #creamos una relacion entre la tabla alumno y la de usuarios
     maquinas_completadas = models.IntegerField(null=True)
     puntos_conseguidos = models.IntegerField(null=True)
-    user_flag = models.IntegerField(null=True)
-    root_flag = models.IntegerField(null=True)
     profile_image = models.ImageField(default='foto_perfil.png')
     
 
     def __str__(self):
-        return f'{self.user.username} Alumno'
+        return f'{self.user.username}'
 
     # def save(self):           esto es para redimensionar las imagenes que se suben pero no funciona y me da pereza ver el por que
     #     super().save()
@@ -48,3 +46,9 @@ class Maquina(models.Model):
     descripcion = models.CharField(max_length=200, null=True)
     ip = models.GenericIPAddressField(null = True)
     dia_creada = models.DateTimeField(auto_now_add=True, null=True)
+    user_flag = models.CharField(max_length=30,null=True)
+    root_flag = models.CharField(max_length=30, null=True)
+    image_machine = models.ImageField(default='linuxLogo.png')
+
+    def __str__(self):
+        return f'{self.nombre_maquina}'

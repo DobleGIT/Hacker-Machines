@@ -10,15 +10,15 @@
                     <div class="card-header">Foto de Perfil</div>
                     
                     <div class="card-body text-center">
-                        {% if request.user.alumno.profile_image.url != NULL %}
+                        {% comment %} {% if request.user.alumno.profile_image.url != NULL %} {% endcomment %}
 
                         <img class="rounded-circle account-img" width="150px" src="{{request.user.alumno.profile_image.url}}">
                         
-                        {% else %}
+                        {% comment %} {% else %}
     
                             <img class="rounded-circle account-img" width="150px" src="foto_perfil.png">
                         
-                        {% endif %}  
+                        {% endif %}   {% endcomment %}
                         
                         <h5 class="card-title"> {{request.user.username}}</h5>
                         

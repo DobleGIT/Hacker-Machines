@@ -1,44 +1,119 @@
 {%  extends 'accounts/main.html' %}
+{% load static %}
 
 {% block content %}
 
-		<br>
+    {% if lista_maquinas %}
 
-		<div class="row">
-			<div class="col-md">
-				<div class="card card-body">
-					<h5>Lista de máquinas</h5>
-				</div>
-				<div class="card card-body">
-					<table class="table">
-						<tr>
-							<th>Nombre de la máquina</th>
-							<th>Estado</th>
-							<th>Categoría</th>
-							<th>Dirección IP</th>
-						</tr>
-						{% if lista_maquinas %}
-							{% for i in lista_maquinas %}
-								<tr>
-									<td><a href="{% url 'maquinas' i.nombre_maquina %}"> {{i.nombre_maquina}}</a></td>
-									<td>{{i.estado}}</td>
-									<td>{{i.categoria}}</td>
-									<td>{{i.ip}}</td>
-								</tr>
-							{% endfor %}
-						{% else %}
-						    <tr>
-								<a> Esto es una mierda para probar que se puede acceder a una sola máquina :)</a>
-								<td><a href="#"> {{maquina_individual.nombre_maquina}}</a></td>
-								<td>{{maquina_individual.estado}}</td>
-								
-							</tr>
-						{% endif %}
-						
-					</table>
-				</div>
-			</div>
-			
-		</div>
+        <main role="main" class="container">
+            <div class="row">
+                <div class="col">
+                    <br>                
+                    <div class="row">
+                        <div class="col-md">
+                            <br/>
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Máquina</th>
+                                        <th>Categoría</th>
+                                        
+                                        <th>Dirección IP</th>
+                                        <th>Estado</th>
+                                        
+                                    </tr>
+                                </thread>
+                                <tbody>
+                                    
+                                        {% for i in lista_maquinas %}
+
+                                            <tr>
+                                                <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="{{i.image_machine.url}}" alt="" style="width: 45px; height: 45px" class="rounded-circle"/>
+                                                    <div class="ms-3">
+                                                    <a href="{% url 'maquinas' i.nombre_maquina %}" class="fw-normal mb-1" style="margin-left:5px" > {{i.nombre_maquina}} </a>
+                                                    </div>
+                                                </div>
+                                                </td>
+                                                <td>
+                                                <p class="fw-normal mb-1">{{i.categoria}}</p>
+                                                
+                                                </td>
+                                                
+                                                <td>{{i.ip}}</td>
+                                                
+                                                <td>
+                                                    <span class="badge badge-success rounded-pill d-inline">Activa</span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                            
+                </div>
+            </div>
+                
+        </main>
+
+    {% else %}
+
+        {% comment %} <tr>
+            <a> Esto es una mierda para probar que se puede acceder a una sola máquina :)</a>
+            <td><a href="#"> {{maquina_individual.nombre_maquina}}</a></td>
+            <td>{{maquina_individual.estado}}</td>
+            
+        </tr> {% endcomment %}
+        {% comment %} <div style="background-color: rgb(34, 34, 34); height: 200px;">
+            <div class="d-flex align-items-center text-center pt-4 pb-4">
+                <div class="profile-block">
+                <img id="profile-picture" src="https://tryhackme-images.s3.amazonaws.com/user-avatars/9a7a0c99fd25fd05fd2bb19f7b59fa26.png">
+                </div>
+                </div>
+        </div>     {% endcomment %}
+
+        <div class="container-fluid p-4" id="barraArriba">
+            <img src="{{maquina_individual.image_machine.url}}"  height=150px width=150px class="rounded-circle" id="machinePhotho"/>
+
+        </div>
+        <div class="container-fluid" id="barraMedio">
+            <div class="container-fluid" id="barraNoti">
+                <div class="row text-center">
+                    <div class="col p-3  text-white text-center" id="barraNoti">
+                        {% comment %} <p class="size-30 bold" id="numberTop"> 10 </p>
+                        <p> Numero de cosas </p> {% endcomment %}
+                        {% comment %} <div class="row text-center" id="numberTop"> 10</div>
+                        <div class="row text-center"> holita</div> {% endcomment %}
+                        <div class="size-30 bold" id="numberTop">46</div>
+                        <div class="size-16 faded">Rooms Complete</div>
+
+                    </div>
+                    <div class="col p-3  text-white text-center" id="barraNoti">
+                        {% comment %} <p class="size-30 bold" id="numberTop"> 10 </p>
+                        <p> Numero de cosas </p> {% endcomment %}
+                        {% comment %} <div class="row text-center" id="numberTop"> 10</div>
+                        <div class="row text-center"> holita</div> {% endcomment %}
+                        <div class="size-30 bold" id="numberTop">46</div>
+                        <div class="size-16 faded">Rooms Complete</div>
+
+                    </div>
+                    <div class="col p-3  text-white text-center" id="barraNoti">
+                        {% comment %} <p class="size-30 bold" id="numberTop"> 10 </p>
+                        <p> Numero de cosas </p> {% endcomment %}
+                        {% comment %} <div class="row text-center" id="numberTop"> 10</div>
+                        <div class="row text-center"> holita</div> {% endcomment %}
+                        <div class="size-30 bold" id="numberTop">46</div>
+                        <div class="size-16 faded">Rooms Complete</div>
+
+                    </div>
+                  </div>
+            </div>
+        </div>
+    {% endif %}
+                        
+                   
+
 
 {% endblock content %}

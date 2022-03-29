@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 	
 
 	 <!-- Bootstrap CSS -->
@@ -11,9 +12,13 @@
 	
 	<!-- CSS Main-->
 	<link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/maquinas.css' %}">
+
+
+    
 
 	<title>Hacker Machines</title>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
 		<div class="container-fluid">
 			<a class="navbar-brand" href="/dashboard"> Hacker Home</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +49,10 @@
 </head>
 <body>
 	{% comment %} Esto es para los mensajes que salen de warnings {% endcomment %}
-	<main role="main" class="container">
+
+	{% comment %} <main role="main" class="container">
 		<div class="row">
-			<div class="col">
+			<div class="col"> {% endcomment %}
 				{% if messages %}
 				{% for message in messages %}
 					<div class="alert alert-{{ message.tags }}">
@@ -58,12 +64,19 @@
 				
 				
 				{% endblock %}
-		  	</div>
+		  	{% comment %} </div>
 		  
 		</div>
-	</main>
+	</main> {% endcomment %}
 	
+    {% comment %} <main role="main" class="container">
+		<div class="row">
+			<div class="col">
 
+            </div>
+		  
+		</div>
+	</main> {% endcomment %}
 	
 </body>
     <!-- Optional JavaScript -->

@@ -1,0 +1,24 @@
+#barraArriba
+{
+    background-color: rgb(34, 34, 34); 
+    height: 200px;
+}
+
+#machinePhotho{
+    
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+#barraMedio{
+    background-color: rgb(34, 34, 34); 
+    height: 100px;
+}
+#barraNoti{
+    background-color: #343a40; 
+    height: 100px;
+}
+#numberTop{
+    font-size: 200%;
+}
