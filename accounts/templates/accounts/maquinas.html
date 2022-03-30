@@ -82,28 +82,19 @@
             <div class="container-fluid" id="barraNoti">
                 <div class="row text-center">
                     <div class="col p-3  text-white text-center" id="barraNoti">
-                        {% comment %} <p class="size-30 bold" id="numberTop"> 10 </p>
-                        <p> Numero de cosas </p> {% endcomment %}
-                        {% comment %} <div class="row text-center" id="numberTop"> 10</div>
-                        <div class="row text-center"> holita</div> {% endcomment %}
+                        
                         <div class="size-30 bold" id="numberTop">46</div>
                         <div class="size-16 faded">Rooms Complete</div>
 
                     </div>
                     <div class="col p-3  text-white text-center" id="barraNoti">
-                        {% comment %} <p class="size-30 bold" id="numberTop"> 10 </p>
-                        <p> Numero de cosas </p> {% endcomment %}
-                        {% comment %} <div class="row text-center" id="numberTop"> 10</div>
-                        <div class="row text-center"> holita</div> {% endcomment %}
+                        
                         <div class="size-30 bold" id="numberTop">46</div>
                         <div class="size-16 faded">Rooms Complete</div>
 
                     </div>
                     <div class="col p-3  text-white text-center" id="barraNoti">
-                        {% comment %} <p class="size-30 bold" id="numberTop"> 10 </p>
-                        <p> Numero de cosas </p> {% endcomment %}
-                        {% comment %} <div class="row text-center" id="numberTop"> 10</div>
-                        <div class="row text-center"> holita</div> {% endcomment %}
+                        
                         <div class="size-30 bold" id="numberTop">46</div>
                         <div class="size-16 faded">Rooms Complete</div>
 
@@ -111,7 +102,17 @@
                   </div>
             </div>
         </div>
-    {% endif %}
+        {% if maquina_individual not in request.user.alumno.accesed_machines %}
+        
+            {% comment %} <button class="btn btn-primary" href="{% url 'access_to_machine' maquina_individual.nombre_maquina %}">Acceder a la maquina</button> {% endcomment %}
+            <button><a class="btn btn-primary" href="{% url 'access_to_machine' maquina_individual %}">Acceder a la maquina</a></button>
+            <p> holita puttttas </p>
+        {% elif maquina_individual in request.user.alumno.accesed_machines %}
+            <p> Estas dentro wey </p>
+        {% endif %}
+
+        <p> {{request.user.alumno.accesed_machines}} </p>
+        {% endif %} 
                         
                    
 

@@ -15,10 +15,23 @@ class Alumno(models.Model):
     maquinas_completadas = models.IntegerField(null=True)
     puntos_conseguidos = models.IntegerField(null=True)
     profile_image = models.ImageField(default='foto_perfil.png')
+
+    #accessed_machines = models.ManyToManyField('Maquina', through='Acceso')
     
 
     def __str__(self):
         return f'{self.user.username}'
+
+    
+    def accesed_machines(self):
+        """
+        It returns the machines that the user has accessed
+        :return: A QuerySet of the machines that the user has accessed.
+        """
+        machines_ids = Acceso.objects.filter(alumnoA=self.user).values_list('maquinaA', flat=True)
+        return Maquina.objects.filter(id__in=machines_ids)
+    
+
 
     # def save(self):           esto es para redimensionar las imagenes que se suben pero no funciona y me da pereza ver el por que
     #     super().save()
@@ -39,7 +52,6 @@ class Maquina(models.Model):
         ('Encendida', 'Apagada'),
     )
     
-    #nombre_creador = models.ForeignKey(Usuario, null= True, on_delete=models.SET_NULL)
     nombre_maquina = models.CharField(max_length=30, null=True, unique=True)
     estado = models.CharField(max_length=30, null=True, choices = ESTADO)
     categoria = models.CharField(max_length=30, null=True)
@@ -52,3 +64,27 @@ class Maquina(models.Model):
 
     def __str__(self):
         return f'{self.nombre_maquina}'
+
+    
+    # def accesed_users(self):
+    #     """
+    #     It returns the list of users that have accessed a given machine
+    #     :return: A QuerySet of Alumno objects.
+    #     """
+    #     users_ids = Acceso.objects.filter(maquina=self.pk).values_list('alumno', flat=True)
+    #     return Alumno.objects.filter(pk__in=users_ids)
+    
+
+class Acceso(models.Model):
+    
+    alumnoA = models.ForeignKey(User, on_delete=models.CASCADE)
+    maquinaA = models.ForeignKey(Maquina, on_delete=models.CASCADE)
+    accesed_date = models.DateTimeField(auto_now_add=True)
+    user_flag = models.BooleanField(default=False)
+    root_flag = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f'{self.alumnoA} accede a {self.maquinaA}'
+    
+

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import *
 from django.contrib.auth.decorators import login_required # lo usamos para los decorators, para que no se pueda acceder a diferentes paginas sin estar loggeado
 
 # Create your views here.
@@ -50,20 +50,35 @@ def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ
 
 
 @login_required(login_url='login')
-def maquinas(request, pk_maquina=None):
-	
-	maquinas = Maquina.objects.all()
-	lista_vacia = [] 
+def maquinas(request, nombre_maquina_url=None):
+    
+    maquinas = Maquina.objects.all()
+    current_user = request.user
+    lista_vacia = [] 
 
-	if pk_maquina != None:
+    if nombre_maquina_url != None: #si se le pasa como argumento el nombre de la maquina
 
-		maquina_individual = Maquina.objects.get(nombre_maquina=pk_maquina) 	#esto quiere decir que a la url se le pasa la clave primaria de la maquina
-		
-		context = {'lista_maquinas':lista_vacia, 'maquina_individual':maquina_individual} 	
+        maquina_individual = Maquina.objects.get(nombre_maquina=nombre_maquina_url) 	#esto quiere decir que a la url se le pasa la clave primaria de la maquina
+        
+        context = {'lista_maquinas':lista_vacia, 'maquina_individual':maquina_individual} 
 
-	else:
-		context = {'lista_maquinas':maquinas} 						#este es el diccionario que le pasamos a la url 
-	return render(request, 'accounts/maquinas.html',context)
+    else: #si no se le pasa ninguna maquina se muestran todas las maquinas
+        context = {'lista_maquinas':maquinas} 						#este es el diccionario que le pasamos a la url 
+    return render(request, 'accounts/maquinas.html',context)
+
+@login_required(login_url='login')
+def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando le da el alumno a acceder a la maquina desde /machines/<nombreMaquina> creamos la relación muchos a muchos entre el usuario y la maquina
+
+    urlMachine = '/maquinas/'
+    urlMachine += nombre_maquina_url
+
+    current_user = request.user
+    machine_to_access = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
+
+    
+    access = Acceso(alumnoA=current_user, maquinaA=machine_to_access)
+    access.save()
+    return redirect(urlMachine)
 
 #@unauthenticathed_user
 def loginUsername(request):     #la pagina del login
