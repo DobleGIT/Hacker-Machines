@@ -1,0 +1,39 @@
+{%  extends 'accounts/main.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+    <div class="container-fluid p-4" id="rowTopOpenvpn">
+        <img src="/static/images/openvpnLogo.png"  height=130px width=130px class="rounded-circle" id="openvpnPhotho"/>
+        
+        <div class="row gy-5">
+            <h1 class="display-5 text-center text-light" id="openvpnTitle">OpenVPN</h1>
+        </div>
+        
+        <div class="row gy-5">
+            <p class="text-sm-start text-light" id="openvpnDescription">Para poder acceder a los retos conectate a nuestra VPN</p>
+        </div>
+    </div>
+
+    <div class="container p-4" >
+
+        <div class="card">
+            <div class="card-header">
+                Información OpenVPN
+            </div>                
+            <div class="card-body">
+                <h5 class="card-title">¿Cómo conectarte a las máquinas?</h5> 
+                <p class="card-text">Para poder conectarte a los retos tienes primero que descargarte el archivo de configuración VPN.
+                <br> Una vez hecho esto AAQUI COPIARME DE LO QUE DIGA EN LA ROOM DE OPENVPN DE TRYHACKME
+                </p>
+                
+            </div>
+        </div>
+
+    </div>
+    
+    
+
+{% endblock content %}

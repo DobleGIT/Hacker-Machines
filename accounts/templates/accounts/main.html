@@ -13,6 +13,7 @@
 	<!-- CSS Main-->
 	<link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/maquinas.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/openvpn.css' %}">
 
 
     
@@ -28,7 +29,7 @@
 				<div class="navbar-nav">
 					
 					<a class="nav-item nav-link" aria-current="page" href="/maquinas">Maquinas</a>
-					<a class="nav-item nav-link" aria-current="page" href="/home">Open VPN</a>
+					<a class="nav-item nav-link" aria-current="page" href="/openvpn">Open VPN</a>
 					<a class="nav-item nav-link" aria-current="page" href="/ranking">Ranking</a>
 				</div>
 		  	</div>
@@ -53,13 +54,13 @@
 	{% comment %} <main role="main" class="container">
 		<div class="row">
 			<div class="col"> {% endcomment %}
-				{% if messages %}
+				{% comment %} {% if messages %}
 				{% for message in messages %}
 					<div class="alert alert-{{ message.tags }}">
 					{{ message }}
 					</div>
 				{% endfor %}
-				{% endif %}
+				{% endif %} {% endcomment %}
 				{% block content %}
 				
 				

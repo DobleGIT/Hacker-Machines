@@ -54,13 +54,88 @@ def maquinas(request, nombre_maquina_url=None):
     
     maquinas = Maquina.objects.all()
     current_user = request.user
+    alumnoBD = Alumno.objects.get(user=current_user)
     lista_vacia = [] 
+    individualUserFlag = False
+    individualRootFlag= False
+    individualCompleted= False
 
     if nombre_maquina_url != None: #si se le pasa como argumento el nombre de la maquina
+        
 
         maquina_individual = Maquina.objects.get(nombre_maquina=nombre_maquina_url) 	#esto quiere decir que a la url se le pasa la clave primaria de la maquina
         
-        context = {'lista_maquinas':lista_vacia, 'maquina_individual':maquina_individual} 
+        #seleccionamos los datos globales de la maquina
+        usersInside = Acceso.objects.filter(maquinaA=maquina_individual).count() #usuarios que han accedido a la maquina
+        #usersInside = usersInside.count()
+        usersUserFlag = Acceso.objects.filter(maquinaA=maquina_individual, user_flag=True).count() #usuario que ha accedido a la maquina y que está loggeado
+        usersRootFlag = Acceso.objects.filter(maquinaA=maquina_individual, root_flag=True).count() #usuario que ha accedido a la maquina y que es root        
+        
+        if Acceso.objects.filter(alumnoA=current_user, maquinaA=maquina_individual).exists(): #esto lo hacemos para evitar errores
+            acceso = Acceso.objects.get(alumnoA=current_user, maquinaA=maquina_individual)
+        else:
+            pass
+        if request.method == 'POST':        #si se hac un post, siginfica que se estan mandando flags
+            flagUserInput = request.POST.get('flagUserInput')
+            flagRootInput = request.POST.get('flagRootInput')
+            urlMachine = '/maquinas/'
+            urlMachine += nombre_maquina_url
+
+            if flagUserInput == maquina_individual.user_flag:
+                #modificar el valor user_flag de la tabla acceso
+                
+                if acceso.user_flag == True:
+                    messages.warning(request, 'Ya conseguiste esta flag')
+                else:
+                    acceso.user_flag = True
+                    acceso.save()
+                    alumnoBD.points += 50
+                    alumnoBD.save()
+                    if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True: #comprobamos si al meter la flag ha completado ya la maquina
+                        acceso.completed = True
+                        acceso.save()
+                        alumnoBD.points += 50
+                        alumnoBD.save()
+                        messages.success(request, '¡Enhorabuena, has completado el reto +100 puntos!')
+                        
+                    else:
+                        messages.success(request, '¡Genial has acertado, +50 puntos!')
+        
+            elif flagRootInput == maquina_individual.root_flag:
+                #modificar el valor root_flag de la tabla acceso
+                acceso = Acceso.objects.get(alumnoA=current_user, maquinaA=maquina_individual)
+                if acceso.root_flag == True:
+                    messages.warning(request, 'Ya conseguiste esta flag')
+                else:
+                    acceso.root_flag = True
+                    acceso.save()
+                    alumnoBD.points += 50
+                    alumnoBD.save()
+                    if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True:
+                        acceso.completed = True
+                        acceso.save()
+                        alumnoBD.points += 50
+                        alumnoBD.save()
+                        messages.success(request, '¡Enhorabuena, has completado el reto +100 puntos!')
+                        
+                    else:
+                        messages.success(request, '¡Genial has acertado, +50 puntos!')
+
+            else:
+                messages.warning(request, 'La flag es incorrecta')
+                
+        if Acceso.objects.filter(alumnoA=current_user, maquinaA=maquina_individual).exists(): 
+            acceso = Acceso.objects.get(alumnoA=current_user, maquinaA=maquina_individual)
+            individualUserFlag = acceso.user_flag # le pasamos la user_flag y root_flag del usuario para comprobar si la ha completado ya o no
+            individualRootFlag = acceso.root_flag
+            individualCompleted = acceso.completed #le pasamos el valor completed del usuario para comprobar si ha completado ya o no la maquina
+        else:
+            pass
+        
+
+        
+        context = {'lista_maquinas':lista_vacia, 'maquina_individual':maquina_individual, 'usersInside':usersInside, 'usersUserFlag':usersUserFlag, 'usersRootFlag':usersRootFlag, 'individualUserFlag':individualUserFlag, 'individualRootFlag':individualRootFlag, 'individualCompleted':individualCompleted}
+        render(request, 'accounts/maquinas.html',context)
 
     else: #si no se le pasa ninguna maquina se muestran todas las maquinas
         context = {'lista_maquinas':maquinas} 						#este es el diccionario que le pasamos a la url 
@@ -68,17 +143,29 @@ def maquinas(request, nombre_maquina_url=None):
 
 @login_required(login_url='login')
 def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando le da el alumno a acceder a la maquina desde /machines/<nombreMaquina> creamos la relación muchos a muchos entre el usuario y la maquina
-
+    #comprobar que no se puede acceder dos veces a la mierda esta
     urlMachine = '/maquinas/'
     urlMachine += nombre_maquina_url
 
     current_user = request.user
     machine_to_access = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
+    machineUserAcess = Acceso.objects.filter(alumnoA=current_user, maquinaA=machine_to_access)
 
+    if machineUserAcess: #esto se hace para no acceder dos veces a la misma máquina
+        messages.warning(request, 'Ya has accedido a esta maquina')
+        return redirect(urlMachine)
+    else:
+        access = Acceso(alumnoA=current_user, maquinaA=machine_to_access)
+        access.save()
+        return redirect(urlMachine)
+
+@login_required(login_url='login')
+def openvpn(request):
+    current_user = request.user
+    alumnoBD = Alumno.objects.get(user=current_user)
     
-    access = Acceso(alumnoA=current_user, maquinaA=machine_to_access)
-    access.save()
-    return redirect(urlMachine)
+    context = {}
+    return render(request, 'accounts/openvpn.html',context)
 
 #@unauthenticathed_user
 def loginUsername(request):     #la pagina del login

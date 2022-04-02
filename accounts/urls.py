@@ -16,6 +16,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('profile/', views.profile, name='profile'),
     path('access_to_machine/<str:nombre_maquina_url>', views.access_to_machine, name='access_to_machine'),
+    path('openvpn/', views.openvpn, name='openvpn'),
 ]
 
 

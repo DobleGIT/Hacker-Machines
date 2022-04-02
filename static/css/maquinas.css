@@ -1,7 +1,7 @@
-#barraArriba
+#rowTop
 {
     background-color: rgb(34, 34, 34); 
-    height: 200px;
+    height: 170px;
 }
 
 #machinePhotho{
@@ -11,7 +11,12 @@
     margin-right: auto;
 
 }
-#barraMedio{
+#rowMiddle
+{
+    background-color: rgb(34, 34, 34); 
+    height: 75px;
+}
+#rowDown{
     background-color: rgb(34, 34, 34); 
     height: 100px;
 }
@@ -21,4 +26,15 @@
 }
 #numberTop{
     font-size: 200%;
+}
+#borderMachine{
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(34, 34, 34);
+}
+.card-header-red {
+    background-color: #a20606;
+    border-color: #a20606;
+    color: white;
+    font-weight: bold;
 }

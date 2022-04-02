@@ -4,11 +4,11 @@
 {% block content %}
 
     {% if lista_maquinas %}
-
+    <br> 
         <main role="main" class="container">
             <div class="row">
                 <div class="col">
-                    <br>                
+                                   
                     <div class="row">
                         <div class="col-md">
                             <br/>
@@ -58,60 +58,150 @@
                 
         </main>
 
-    {% else %}
+     {% else %}  {% comment %} Esto se muestra si estas en maquinas/UNAMAQUINA {% endcomment %}
 
-        {% comment %} <tr>
-            <a> Esto es una mierda para probar que se puede acceder a una sola máquina :)</a>
-            <td><a href="#"> {{maquina_individual.nombre_maquina}}</a></td>
-            <td>{{maquina_individual.estado}}</td>
-            
-        </tr> {% endcomment %}
-        {% comment %} <div style="background-color: rgb(34, 34, 34); height: 200px;">
-            <div class="d-flex align-items-center text-center pt-4 pb-4">
-                <div class="profile-block">
-                <img id="profile-picture" src="https://tryhackme-images.s3.amazonaws.com/user-avatars/9a7a0c99fd25fd05fd2bb19f7b59fa26.png">
-                </div>
-                </div>
-        </div>     {% endcomment %}
-
-        <div class="container-fluid p-4" id="barraArriba">
+        <div class="container-fluid p-4" id="rowTop">
             <img src="{{maquina_individual.image_machine.url}}"  height=150px width=150px class="rounded-circle" id="machinePhotho"/>
 
         </div>
-        <div class="container-fluid" id="barraMedio">
-            <div class="container-fluid" id="barraNoti">
+        <div class="container-fluid p-4" id="rowMiddle">
+            <p class="h1 text-center text-white" > {{maquina_individual.nombre_maquina|upper}} </p>
+        </div>
+        <div class="container-fluid" id="rowDown">
+            <div class="container-fluid border-top-0" id="barraNoti">
                 <div class="row text-center">
                     <div class="col p-3  text-white text-center" id="barraNoti">
                         
-                        <div class="size-30 bold" id="numberTop">46</div>
-                        <div class="size-16 faded">Rooms Complete</div>
+                        <div class="size-30 bold" id="numberTop">{{usersInside}}</div>
+                        <div class="size-16 faded">Usuarios han accedido</div>
 
                     </div>
                     <div class="col p-3  text-white text-center" id="barraNoti">
                         
-                        <div class="size-30 bold" id="numberTop">46</div>
-                        <div class="size-16 faded">Rooms Complete</div>
+                        <div class="size-30 bold" id="numberTop">{{usersUserFlag}}</div>
+                        <div class="size-16 faded">User Flags totales</div>
 
                     </div>
                     <div class="col p-3  text-white text-center" id="barraNoti">
                         
-                        <div class="size-30 bold" id="numberTop">46</div>
-                        <div class="size-16 faded">Rooms Complete</div>
+                        <div class="size-30 bold" id="numberTop">{{usersRootFlag}}</div>
+                        <div class="size-16 faded">Root Flags totales</div>
 
                     </div>
                   </div>
             </div>
         </div>
-        {% if maquina_individual not in request.user.alumno.accesed_machines %}
-        
-            {% comment %} <button class="btn btn-primary" href="{% url 'access_to_machine' maquina_individual.nombre_maquina %}">Acceder a la maquina</button> {% endcomment %}
-            <button><a class="btn btn-primary" href="{% url 'access_to_machine' maquina_individual %}">Acceder a la maquina</a></button>
-            <p> holita puttttas </p>
-        {% elif maquina_individual in request.user.alumno.accesed_machines %}
-            <p> Estas dentro wey </p>
-        {% endif %}
+        {% if maquina_individual not in request.user.alumno.accesed_machines %} {% comment %} Esto se muestra si NO has entrado en la máquina  {% endcomment %}
 
-        <p> {{request.user.alumno.accesed_machines}} </p>
+            <br/>
+            <div class="container" >
+                <div class="card">                
+                    <div class="card-body">
+                        <h5 class="card-title">Descripción</h5>
+                        <p class="card-text">{{maquina_individual.descripcion}}</p>
+                        <a href="{% url 'access_to_machine' maquina_individual.nombre_maquina %}" class="btn btn-primary">Acceder a la maquina</a>
+                    </div>
+                </div>
+            </div>
+
+        {% elif maquina_individual in request.user.alumno.accesed_machines %} {% comment %} Esto se muestra SI ya has entrado en la máquina  {% endcomment %}
+
+            <br/>
+            
+            <div class="container" >
+
+                {% comment %} Mostramos los mensajes de alerta {% endcomment %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                        </div>
+                    {% endfor %}
+				{% endif %}
+
+                <div class="card">
+                    <div class="card-header">
+                      Dirección IP del reto
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="card-title text-right">DIRECCIÓN IP</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-center-bold ">{{maquina_individual.ip}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                </br>
+                
+
+                <div class="card">
+                    <div class="card-header text-center">
+                        Información de la maquina
+                    </div>                
+                    <div class="card-body">
+                        
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <h5 class="card-title">¿Cómo acceder a la máquina?</h5> 
+                            <p class="card-text">Para poder acceder a la máquina descargate el archivo de <a href="{% url 'openvpn' %}" class="text-decoration-none">OpenVPN</a> para poder acceder al entorno virtual.</p>
+                            
+                            <hr>
+                        
+                            <h5 class="card-title">Descripción</h5> 
+                            <p class="card-text">{{maquina_individual.descripcion}}</p>
+
+                            <hr>
+
+                            <h5 class="card-title">Flags</h5> 
+                            
+                            <p class="card-text">La encontrarás al obtener privilegios de usuario en la máquina.</p>
+                            {% if individualUserFlag is False %}    {% comment %}  Comprobamos si el usuario ha averiguado ya la flag {% endcomment %}
+                                <div class="input-group mb-4">
+                                    <input type="text" name="flagUserInput" class="form-control" placeholder="User Flag" >
+                                    
+                                    <button class="btn btn-outline-success" type="submit"  style="width:20%;">  Comprobar  </button>
+                                    
+                                </div>
+                            {% else %}
+                                <div class="input-group mb-4">
+                                    <input type="text" name="flagRootInput" class="form-control" placeholder="Respuesta Correcta" disabled>                                    
+                                    <button class="btn btn-outline-success" type="submit"  style="width:20%; background-color:#28a745; color: #fff;" disabled>  Completado  </button>
+
+                                    
+                                </div>
+                                
+                            {% endif %}
+                            
+                            <p class="card-text">La encontrarás al obtener privilegios de Super Usuario en la máquina.</p>
+                            {% if individualRootFlag is False %} {% comment %}  Comprobamos si el usuario ha averiguado ya la flag {% endcomment %}
+                                <div class="input-group mb-4">
+                                    <input type="text" name="flagRootInput" class="form-control" placeholder="Root Flag" >
+                                    
+                                    <button class="btn btn-outline-success" type="submit"  style="width:20%;">  Comprobar  </button>
+                                    
+                                </div>
+                            {% else %}
+                                <div class="input-group mb-4">
+                                    <input type="text" name="flagRootInput" class="form-control" placeholder="Respuesta Correcta" disabled>                                    
+                                    <button class="btn btn-outline-success" type="submit"  style="width:20%; background-color:#28a745; color: #fff;" disabled>  Completado  </button>
+
+                                    
+                                </div>
+                                
+                            {% endif %}
+                     
+                        </form>
+                    </div>
+                </div>
+                <br/>
+            </div>
+
+        {% endif %}
+        {% comment %} <p> {{request.user.alumno.accesed_machines}} </p> {% endcomment %}
         {% endif %} 
                         
                    

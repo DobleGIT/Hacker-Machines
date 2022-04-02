@@ -1,0 +1,25 @@
+#rowTopOpenvpn
+{
+    background-color: rgb(34, 34, 34); 
+    height: 190px;
+}
+#openvpnPhotho{
+        
+    float:left;
+    margin-left: 20px;
+    margin-right: auto;
+    
+}
+
+#openvpnTitle{
+    
+    float:left;
+    
+    margin-top:20px;
+    margin-left: 80px;
+    
+}
+#openvpnDescription {
+    
+    margin-left: 80px;
+}

@@ -13,7 +13,7 @@ from PIL import Image       #Lo usamos para redimensionar la imagen de perfil
 class Alumno(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)  #creamos una relacion entre la tabla alumno y la de usuarios
     maquinas_completadas = models.IntegerField(null=True)
-    puntos_conseguidos = models.IntegerField(null=True)
+    points = models.IntegerField(null=True)
     profile_image = models.ImageField(default='foto_perfil.png')
 
     #accessed_machines = models.ManyToManyField('Maquina', through='Acceso')
