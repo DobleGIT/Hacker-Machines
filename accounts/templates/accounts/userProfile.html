@@ -1,0 +1,57 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <div class="container-fluid p-4" id="userProfileRowTop">
+        <img src="{{user.alumno.profile_image.url}}"  height=150px width=150px class="rounded-circle" id="userProfilePhoto"/>
+
+    </div>
+    <div class="container-fluid p-4" id="userProfilerowMiddle">
+        <p class="h1 text-center text-white" > {{user.username|upper}} </p>
+    </div>
+    <div class="container-fluid" id="userProfilerowDown">
+        <div class="container-fluid border-top-0" id="userProfilebarraNoti">
+            <div class="row text-center">
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{machinesInside}}</div>
+                    <div class="size-16 faded">Maquinas accedidas</div>
+
+                </div>
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{completedRooms}}</div>
+                    <div class="size-16 faded">Maquinas completadas</div>
+
+                </div>
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">º1</div>
+                    <div class="size-16 faded">Posicion</div>
+
+                </div>
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{points}}</div>
+                    <div class="size-16 faded">Puntos totales</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <br/>
+    <div class="container" >
+        <div class="card">                
+            <div class="card-body">
+                <h5 class="card-title">Descripción</h5>
+                <p class="card-text"> AQUI PONER LA LISTA DE LAS MAQUINAS QUE HA COMPLETADO </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+{% endblock content %}

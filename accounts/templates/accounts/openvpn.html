@@ -26,10 +26,30 @@
             <div class="card-body">
                 <h5 class="card-title">¿Cómo conectarte a las máquinas?</h5> 
                 <p class="card-text">Para poder conectarte a los retos tienes primero que descargarte el archivo de configuración VPN.
-                <br> Una vez hecho esto AAQUI COPIARME DE LO QUE DIGA EN LA ROOM DE OPENVPN DE TRYHACKME
+                <br> Esto es necesario para que te puedas conectar a nuestra red, en donde están todas las máquinas virtuales listas para ser hackeadas.
+                     Para poder descargar el archivo haz click en el botón que se muestra a continuación.
+                     
                 </p>
-                
+                <a href="/media/{{request.user.alumno.openvpnFile}}"  class="btn btn-primary">Descargar archivo</a>
+                {% comment %} {{ url_for('openvpn.download') }} Esto dentro del href?{% endcomment %}
+                <hr>
+                <h5 class="card-title">Linux</h5> 
+                <p class="card-text">
+                    Como recomendación a la hora de realizar los retos te sugerimos que utilices una distribución de Linux especializada en el pentesting y hacking ético, como pueden ser 
+                    <a href="https://www.kali.org/" class="text-decoration-none"  target="_blank">Kali Linux</a> o <a href="https://www.parrotsec.org/" class="text-decoration-none"  target="_blank">Parrot</a>.
+                    <br>
+                    Una vez descargado con tu distribución de Linux favorita, dirígete al directorio donde está ubicado el archivo y abre una terminal, 
+                    a continuación ejecuta los siguiente comandos: 
+                    <br>
+                    <ol> 
+                        <li>Descarga OpenVPN utilizando: <code> sudo apt install openvpn </code></li>
+                        <li>Ejecuta el archivo .ovpn con el comando: <code> sudo ./nombreArchivo.ovpn</code></li>
+                    </ol>
+                    
+                </p>
             </div>
+            
+            
         </div>
 
     </div>

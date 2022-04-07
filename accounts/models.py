@@ -12,9 +12,10 @@ from PIL import Image       #Lo usamos para redimensionar la imagen de perfil
 
 class Alumno(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)  #creamos una relacion entre la tabla alumno y la de usuarios
-    maquinas_completadas = models.IntegerField(null=True)
-    points = models.IntegerField(null=True)
-    profile_image = models.ImageField(default='foto_perfil.png')
+    maquinas_completadas = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)
+    profile_image = models.ImageField(default='images/profileImages/foto_perfil.png', upload_to='images/profileImages/')
+    openvpnFile = models.FileField(upload_to='openvpn/',default='openvpn/lab_DobleGI.ovpn',null=True) #cambiar el default
 
     #accessed_machines = models.ManyToManyField('Maquina', through='Acceso')
     
@@ -55,12 +56,12 @@ class Maquina(models.Model):
     nombre_maquina = models.CharField(max_length=30, null=True, unique=True)
     estado = models.CharField(max_length=30, null=True, choices = ESTADO)
     categoria = models.CharField(max_length=30, null=True)
-    descripcion = models.CharField(max_length=200, null=True)
+    descripcion = models.CharField(max_length=1000, null=True)
     ip = models.GenericIPAddressField(null = True)
     dia_creada = models.DateTimeField(auto_now_add=True, null=True)
     user_flag = models.CharField(max_length=30,null=True)
     root_flag = models.CharField(max_length=30, null=True)
-    image_machine = models.ImageField(default='linuxLogo.png')
+    image_machine = models.ImageField(default='images/machineImages/linuxLogo.png',upload_to='images/machineImages/')
 
     def __str__(self):
         return f'{self.nombre_maquina}'

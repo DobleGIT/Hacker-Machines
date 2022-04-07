@@ -1,5 +1,6 @@
-from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from urllib import response
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import FileResponse, HttpResponse, Http404
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
@@ -8,8 +9,10 @@ from django.contrib.auth.decorators import login_required # lo usamos para los d
 
 # Create your views here.
 from .models import *
+import os
 from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm  
 from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
+
 
 def home(request):
 	
@@ -48,9 +51,33 @@ def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ
 	context={'alumno_form':alumno_form, 'user_form':user_form}
 	return render(request, 'accounts/profile.html',context)
 
+@login_required(login_url='login')
+def userProfile(request, id):
+    machinesInside=0
+    user = get_object_or_404(User, pk=id)
+    userFlags = 0
+    rootFlags = 0
+    alumno = Alumno.objects.get(user=user)
+
+    machinesInside = Acceso.objects.filter(alumnoA=user).count()
+    completedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
+    rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
+    context = {'user':user, 'machinesInside':machinesInside, 'completedRooms':completedRooms, 'points':alumno.points}
+    return render(request, 'accounts/userProfile.html', context)
+
+@login_required(login_url='login')
+def ranking(request):
+    
+    listaUsuarios = User.objects.all()
+    listaUsuariosOrdenada = listaUsuarios.order_by('-alumno__points')
+    #lista_alumnos_ordenada = lista_alumnos.order_by('-puntos')
+    context = {"listaUsuariosOrdenada":listaUsuariosOrdenada}
+    return render(request, 'accounts/ranking.html',context)
+
 
 @login_required(login_url='login')
 def maquinas(request, nombre_maquina_url=None):
+
     
     maquinas = Maquina.objects.all()
     current_user = request.user
@@ -167,6 +194,26 @@ def openvpn(request):
     context = {}
     return render(request, 'accounts/openvpn.html',context)
 
+@login_required(login_url='login')
+def secureOpenVpnFiles(request,file):
+    # urlFileOpenVpn = 'openvpn/'
+    # urlFileOpenVpn += file
+    # current_user = request.user
+    # if Alumno.objects.filter(user=current_user, openvpnFile=urlFileOpenVpn).exists(): #comprobamos que el archivo que quiere descargar es el suyo propio
+    #     return HttpResponse(file, content_type='application/octet-stream')
+    # else:
+    #     return redirect('home')
+    urlFileOpenVpn = 'openvpn/'
+    urlFileOpenVpn += file
+    pathPc = '/home/jaime/Escritorio/TFG/media/openvpn/'
+    pathPc += file
+    current_user = request.user
+    if Alumno.objects.filter(user=current_user, openvpnFile=urlFileOpenVpn).exists(): #comprobamos que el archivo que quiere descargar es el suyo propio
+        fileRead = open(pathPc, 'rb')
+        return FileResponse(fileRead, content_type='application/octet-stream')
+    else:
+        return redirect('home')
+
 #@unauthenticathed_user
 def loginUsername(request):     #la pagina del login
 
@@ -211,3 +258,4 @@ def registrarse(request):
 
 	contexto = {'form':form}			
 	return render(request, 'accounts/registrarse.html', contexto)
+
