@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required # lo usamos para los d
 
 # Create your views here.
 from .models import *
+import docker
 import os
 from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm  
 from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
@@ -238,24 +239,73 @@ def logoutUser(request):	#cuando el usuario pulsa el boton de logout se le direc
 	return redirect('login')
 
 def registrarse(request):
+    contexto={}
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Usuario {username} creado')
+            #Generamos el archivo openvpn para el alumno
+            #comando equivalente a docker run -v hacker-machines-openvpn:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full username nopass
+            client = docker.from_env()
+            volumenes = ['hacker-machines-openvpn:/etc/openvpn']
+            commandoGenerar =['easyrsa', 'build-client-full', username, 'nopass']
+            imagen = 'kylemanna/openvpn'
+            variable=['EASYRSA_PASSIN=pass:SuperJaime23'] #contraseña del docker
+            client.containers.run(image=imagen,command=commandoGenerar,volumes=volumenes,environment=variable,auto_remove=True)
+            
+            #comando equivalente a docker run -v hacker-machines-openvpn:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient username > username.ovpn
+            comandoObtener = ['ovpn_getclient', username]
+            cosa = client.containers.run(image=imagen,command=comandoObtener,volumes=volumenes,auto_remove=True)
+            
+            #guardamos el archivo en el directorio de la base de datos
+            nameFile = '/home/jaime/Escritorio/TFG/media/openvpn/'+username+'.ovpn'
 
-	#if request.user.is_authenticated: #esto se usa para comprobar que si está autentificado no pueda acceder a registrarse
-	#	return redirect('home')
-	#else:
+            archivoOpenVpn=open(nameFile,"w")
+            archivoOpenVpn.write(cosa.decode('utf-8'))
+            archivoOpenVpn.close()
+
+            #guardamos en la base de datos
+            userCreated = User.objects.get(username=username)
+            alumnoCreated = Alumno.objects.get(user=userCreated)
+            alumnoCreated.openvpnFile = '/media/openvpn/'+username+'.ovpn'
+            alumnoCreated.save()
+            return redirect('login')
+        else:
+            messages.info(request, 'Completa correctamente los campos')
+    else:
+        form = CreateUserForm()
+    contexto = {'form':form}
+    return render(request, 'accounts/registrarse.html',contexto)
+
+
+# def registrarse(request):
+
+# 	#if request.user.is_authenticated: #esto se usa para comprobar que si está autentificado no pueda acceder a registrarse
+# 	#	return redirect('home')
+# 	#else:
 	
 		
-	if request.method == 'POST':
-		form = CreateUserForm(request.POST)
-		if form.is_valid():
-			user = form.save()
+# 	if request.method == 'POST':
+# 		form = CreateUserForm(request.POST)
+# 		if form.is_valid():
+#             user = form.save()
+#             username = form.cleaned_data.get('username')
+#             messages.success(request, 'El usuario ' + username + ' ha sido creado correctamente')
+#             return redirect('login')
 
-			#Alumno.objects.create(user=user)
-			username = form.cleaned_data['username']
-			messages.success(request, f'Usuario {username} creado')
-			return redirect('login')
-	else:
-		form = CreateUserForm()
+# 	else:
+# 		form = CreateUserForm()
 
-	contexto = {'form':form}			
-	return render(request, 'accounts/registrarse.html', contexto)
+# 	contexto = {'form':form}			
+# 	return render(request, 'accounts/registrarse.html', contexto)
 
+# user = form.save()
+#             username = form.cleaned_data['username']
+#             # userCreated = User.objects.get(username=username)
+#             # alumnoBD = Alumno.objects.get(user=userCreated)
+
+#             messages.success(request, f'Usuario {username} creado')
+
+# 			return redirect('login')

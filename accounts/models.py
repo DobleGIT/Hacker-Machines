@@ -15,7 +15,7 @@ class Alumno(models.Model):
     maquinas_completadas = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
     profile_image = models.ImageField(default='images/profileImages/foto_perfil.png', upload_to='images/profileImages/')
-    openvpnFile = models.FileField(upload_to='openvpn/',default='openvpn/lab_DobleGI.ovpn',null=True) #cambiar el default
+    openvpnFile = models.FileField(upload_to='openvpn/',null=True) #cambiar el default
 
     #accessed_machines = models.ManyToManyField('Maquina', through='Acceso')
     

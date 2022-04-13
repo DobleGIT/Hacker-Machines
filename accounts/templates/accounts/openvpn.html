@@ -30,7 +30,7 @@
                      Para poder descargar el archivo haz click en el botón que se muestra a continuación.
                      
                 </p>
-                <a href="/media/{{request.user.alumno.openvpnFile}}"  class="btn btn-primary">Descargar archivo</a>
+                <a href="{{request.user.alumno.openvpnFile}}"  class="btn btn-primary">Descargar archivo</a>
                 {% comment %} {{ url_for('openvpn.download') }} Esto dentro del href?{% endcomment %}
                 <hr>
                 <h5 class="card-title">Linux</h5> 
