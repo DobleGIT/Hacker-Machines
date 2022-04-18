@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required # lo usamos para los d
 
 # Create your views here.
 from .models import *
+from django.core.paginator import Paginator
 import docker
 import os
 from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm  
@@ -59,11 +60,20 @@ def userProfile(request, id):
     userFlags = 0
     rootFlags = 0
     alumno = Alumno.objects.get(user=user)
+    countMachinesInside = Acceso.objects.filter(alumnoA=user).count()
+    
+    if countMachinesInside != 0:
+        machinesCompletedList = []
+        machinesCompleted= Acceso.objects.filter(alumnoA=user,completed=True)
+        for machine in machinesCompleted:
+            maquinaIndividual = Maquina.objects.get(pk=machine.maquinaA.pk)
+            machinesCompletedList.append(maquinaIndividual)
 
-    machinesInside = Acceso.objects.filter(alumnoA=user).count()
-    completedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
+        
+    countCompletedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
     rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
-    context = {'user':user, 'machinesInside':machinesInside, 'completedRooms':completedRooms, 'points':alumno.points}
+    context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompletedList}
+    
     return render(request, 'accounts/userProfile.html', context)
 
 @login_required(login_url='login')
@@ -71,8 +81,11 @@ def ranking(request):
     
     listaUsuarios = User.objects.all()
     listaUsuariosOrdenada = listaUsuarios.order_by('-alumno__points')
+    paginator = Paginator(listaUsuariosOrdenada, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     #lista_alumnos_ordenada = lista_alumnos.order_by('-puntos')
-    context = {"listaUsuariosOrdenada":listaUsuariosOrdenada}
+    context = {"listaUsuariosOrdenada":listaUsuariosOrdenada,'page_obj': page_obj, 'paginator':paginator}
     return render(request, 'accounts/ranking.html',context)
 
 

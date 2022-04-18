@@ -19,7 +19,7 @@
                                         <th>Categoría</th>
                                         
                                         <th>Dirección IP</th>
-                                        <th>Estado</th>
+                                        
                                         
                                     </tr>
                                 </thread>
@@ -32,7 +32,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <img src="{{i.image_machine.url}}" alt="" style="width: 45px; height: 45px" class="rounded-circle"/>
                                                     <div class="ms-3">
-                                                    <a href="{% url 'maquinas' i.nombre_maquina %}" class="fw-normal mb-1" style="margin-left:5px" > {{i.nombre_maquina}} </a>
+                                                    <a href="{% url 'maquinas' i.nombre_maquina %}" class="link-primary fw-normal mb-1" style="margin-left:5px" > {{i.nombre_maquina}} </a>
                                                     </div>
                                                 </div>
                                                 </td>
@@ -43,9 +43,7 @@
                                                 
                                                 <td>{{i.ip}}</td>
                                                 
-                                                <td>
-                                                    <span class="badge badge-success rounded-pill d-inline">Activa</span>
-                                                </td>
+                                                
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -126,10 +124,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="card-title text-right">DIRECCIÓN IP</h5>
+                                <h5 class="card-title text-end">DIRECCIÓN IP</h5>
                             </div>
                             <div class="col-md-6">
-                                <p class="text-center-bold ">{{maquina_individual.ip}}</p>
+                                <p class="text-center-bold text-info ">{{maquina_individual.ip}}</p>
                             </div>
                         </div>
                     </div>

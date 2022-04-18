@@ -4,58 +4,97 @@
 {% block content %}
 
     {% if listaUsuariosOrdenada %}
-    <br> 
-        <main role="main" class="container">
-            <div class="row">
-                <div class="col">
-                                   
-                    <div class="row">
-                        <div class="col-md">
-                            <br/>
-                            <table class="table align-middle mb-0 bg-white">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th>Usuario</th>
-                                        <th>Puntos</th>
-                                        
-                                        <th>Dirección IP</th>
-                                        <th>Estado</th>
-                                        
-                                    </tr>
-                                </thread>
-                                <tbody>
-                                    
-                                    {% for i in listaUsuariosOrdenada %}
+    
+        <br> 
+        <div class="d-flex justify-content-center">
 
-                                        <tr>
-                                            <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="{{i.alumno.profile_image.url}}" alt="" style="width: 45px; height: 45px" class="rounded-circle"/>
-                                                <div class="ms-3">
-                                                <a href="{% url 'userProfile' i.pk %}" class="fw-normal mb-1" style="margin-left:5px" > {{i.username}}</a>
-                                                </div>
-                                            </div>
-                                            </td>
-                                            <td>
-                                            <p class="fw-normal mb-1"></p>
-                                            
-                                            </td>
-                                            
-                                            <td></td>
-                                            
-                                            <td>
-                                                <span class="badge bg-info text-dark">1</span>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                            
-                </div>
-            </div>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class"page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                    </li>
+
+                {% else %}
+                    <li class"page-item disabled">
+                        <a class="page-link" href="#">&laquo;</a>
+                    </li>
+                {% endif %}
+
+                {% for i in paginator.page_range %}
                 
-        </main>
+                    {% if i == page_obj.number %}
+                        <li class="page-item active">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">&raquo;</a>
+                    </li>
+                {% endif %}
+                
+
+                
+            </ul>
+
+        </div>
+
+        <div class="container">
+            
+                            
+            <table class="table table-striped">
+                <thead >
+                    <tr>
+                        <th class="ps-5">Usuario</th>
+                        <th>Puntos</th>
+                        <th>Posición</th>
+                        
+                    </tr>
+                </thread>
+                <tbody>
+                    
+                    {% for i in page_obj %}
+
+                        <tr>
+                            
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{i.alumno.profile_image.url}}" alt="" style="width: 45px; height: 45px" class="rounded-circle"/>
+                                    <div class="ms-3">
+                                    <a href="{% url 'userProfile' i.pk %}" class="fw-normal mb-1" style="margin-left:5px" > {{i.username}}</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="fw-normal mb-1">
+                                    {{i.alumno.points}}
+                                </p>
+                                
+                            </td>
+                            <td>
+                                <a> 1 </a>
+                            
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+
+
+                </tbody>
+            </table>
+                        
+        </div>
+
     {% endif %}
 {% endblock %}

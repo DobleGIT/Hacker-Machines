@@ -16,13 +16,13 @@
             <div class="row text-center">
                 <div class="col p-3  text-white text-center" id="barraNoti">
                     
-                    <div class="size-30 bold" id="userProfilenumberTop">{{machinesInside}}</div>
+                    <div class="size-30 bold" id="userProfilenumberTop">{{countMachinesInside}}</div>
                     <div class="size-16 faded">Maquinas accedidas</div>
 
                 </div>
                 <div class="col p-3  text-white text-center" id="barraNoti">
                     
-                    <div class="size-30 bold" id="userProfilenumberTop">{{completedRooms}}</div>
+                    <div class="size-30 bold" id="userProfilenumberTop">{{countCompletedRooms}}</div>
                     <div class="size-16 faded">Maquinas completadas</div>
 
                 </div>
@@ -44,11 +44,31 @@
     
     <br/>
     <div class="container" >
-        <div class="card">                
-            <div class="card-body">
-                <h5 class="card-title">Descripción</h5>
-                <p class="card-text"> AQUI PONER LA LISTA DE LAS MAQUINAS QUE HA COMPLETADO </p>
-            </div>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+
+            {% for accessed in machinesCompleted %}
+                <div class="col mb-4">
+                    <div class="card">
+                        {% comment %} <img src="{{accessed.maquina.}}" class="card-img-top" alt="..."> {% endcomment %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{accessed.nombre_maquina}}</h5>
+                            {% comment %} <p class="card-text">{{machine.description}}</p>
+                            <a href="{{machine.get_absolute_url}}" class="btn btn-primary">Ver</a> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="col">
+                <div class="card">
+                  <img src="..." class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  </div>
+                </div>
+              </div>
+            
         </div>
     </div>
 
