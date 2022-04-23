@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',                 #añadimos el crispy_forms y  crispy_bootstrap5 para la integración con bootstrap5
-    "crispy_bootstrap5",
+    'crispy_bootstrap5',
+    'django_filters',               #añadimos el django_filters para el filtrado de datos
+
 ]
 
 MIDDLEWARE = [

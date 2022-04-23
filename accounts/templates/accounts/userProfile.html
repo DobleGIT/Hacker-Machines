@@ -26,16 +26,18 @@
                     <div class="size-16 faded">Maquinas completadas</div>
 
                 </div>
-                <div class="col p-3  text-white text-center" id="barraNoti">
-                    
-                    <div class="size-30 bold" id="userProfilenumberTop">º1</div>
-                    <div class="size-16 faded">Posicion</div>
 
-                </div>
                 <div class="col p-3  text-white text-center" id="barraNoti">
                     
                     <div class="size-30 bold" id="userProfilenumberTop">{{points}}</div>
                     <div class="size-16 faded">Puntos totales</div>
+
+                </div>
+
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{user.date_joined|date}}</div>
+                    <div class="size-16 faded">Fecha registro</div>
 
                 </div>
             </div>
@@ -43,33 +45,78 @@
     </div>
     
     <br/>
-    <div class="container" >
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="container px-5" >
+        {% if machinesCompleted %}
+        <p class="h2 text-center">Máquinas que el usuario ha completado</p>
+        <br>
+            <div class="container px-5" >
+                <div class="container px-5" >
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
 
-            {% for accessed in machinesCompleted %}
-                <div class="col mb-4">
-                    <div class="card">
-                        {% comment %} <img src="{{accessed.maquina.}}" class="card-img-top" alt="..."> {% endcomment %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{accessed.nombre_maquina}}</h5>
-                            {% comment %} <p class="card-text">{{machine.description}}</p>
-                            <a href="{{machine.get_absolute_url}}" class="btn btn-primary">Ver</a> {% endcomment %}
-                        </div>
+                        {% for accessed in machinesCompleted %}
+                            {% comment %} <div class="col mb-4">
+                                <div class="card" style="height: 20rem;">
+                                    <img src="{{accessed.image_machine.url}}" class="card-img-top" id="machineImages"  >
+                                    <div class="card-body">
+                                        
+                                        
+                                        <h5 class="card-title text-center">{{accessed.nombre_maquina}}</h5>
+                                        
+                                        <a href="{% url 'maquinas' accessed.nombre_maquina %}" class="btn btn-outline-primary">Ver</a> 
+                                    </div>
+                                </div>
+                            </div> {% endcomment %}
+
+                            <div class="card mb-3" style="max-width: 540px;">
+                                <div class="row g-0">
+                                  <div class="col-md-4">
+                                    <img src="{{accessed.image_machine.url}}" class="card-img-top" id="machineImages"  >                                  </div>
+                                  <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">{{accessed.nombre_maquina}}</h5>
+                                      
+                                      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                
+                        {% endfor %}
                     </div>
                 </div>
-            {% endfor %}
+            </div> 
+            {% comment %} {% for accessed in machinesCompleted %}
+            <div id="maquinasCompletadas">
+                <div class="col-auto">
+                    <img src="{{accessed.image_machine.url}}" class="img-fluid" id="imagenMaquina" height=150px width=150px >
 
-            <div class="col">
-                <div class="card">
-                  <img src="..." class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  </div>
                 </div>
-              </div>
-            
-        </div>
+                <div class="col">
+                    <div class="card-block px-2 room-body">
+                      <div class="card-room-title bold">Learning Cyber Security</div>
+                      <div class="card-room-desc text-lgray">Get a short introduction to a few of the security topics you'll be learning about.</div>
+                    </div>
+                  </div>
+
+            </div>
+            {% endfor %} {% endcomment %}
+
+        {% else %}
+            <div class="card">
+                <div class="card-header">
+                    Todavía no ha completado ninguna máquina
+                </div>
+                <div class="card-body">
+                    
+                    <p class="card-text"> Creemos que todavía sigue durmiendo </p>
+                    <img src="https://www.seekpng.com/png/detail/183-1834758_vector-free-snorlax-by-awokenarts-on-deviantart-snorlax.png" class="rounded mx-auto d-block" id="machineImages"  >
+
+                    
+                </div>
+            </div>
+            {% comment %} <p class="h2 text-center">Todavía no ha completado ninguna máquina</p>
+            <img src="https://www.seekpng.com/png/detail/183-1834758_vector-free-snorlax-by-awokenarts-on-deviantart-snorlax.png" class="rounded mx-auto d-block" id="machineImages"  > {% endcomment %}
+        {% endif %}
     </div>
 
     

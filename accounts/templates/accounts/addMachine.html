@@ -1,0 +1,38 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="container-fluid p-4" id="rowTopOpenvpn">
+        <img src="/static/images/1106631.png"  height=130px width=130px class="rounded-circle" id="openvpnPhotho"/>
+        
+        <div class="row gy-4 me-5">
+            <h1 class="display-5  text-light" id="openvpnTitle">Laboratorio Virtual</h1>
+            <p class="text-sm-start text-light" id="openvpnDescription">Aquí tienes la lista de nuestras máquinas preparadas para que los hackers como tú rompan su seguridad, eso si puedes conseguirlo 😏 </p>
+        </div>
+        
+    </div>
+    <br> 
+    <div class="container px-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+		{% endif %}
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{machineForm | crispy}}
+
+            <!-- Save changes button-->
+            <button class="btn btn-primary" type="submit">Guardar Cambios</button>
+            
+            
+            
+        </form>
+    </div>
+
+{% endblock content %}

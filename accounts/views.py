@@ -5,16 +5,18 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import *
-from django.contrib.auth.decorators import login_required # lo usamos para los decorators, para que no se pueda acceder a diferentes paginas sin estar loggeado
+from django.contrib.auth.decorators import login_required  # lo usamos para los decorators, para que no se pueda acceder a diferentes paginas sin estar loggeado 
+from django.contrib.auth.models import Group
+from django.utils import timezone
 
 # Create your views here.
 from .models import *
+from .decorators import allowed_users #allowed_users es usado para controlar los grupos y permisos para acceder a determinadas paginas
 from django.core.paginator import Paginator
-import docker
-import os
-from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm  
+import docker, datetime
+from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm, AddMachinesForm
 from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
-
+from .filters import UserFilter                 #filtro para buscar por usuarios
 
 def home(request):
 	
@@ -56,21 +58,23 @@ def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ
 @login_required(login_url='login')
 def userProfile(request, id):
     machinesInside=0
+    machinesCompletedList = []
     user = get_object_or_404(User, pk=id)
     userFlags = 0
     rootFlags = 0
     alumno = Alumno.objects.get(user=user)
     countMachinesInside = Acceso.objects.filter(alumnoA=user).count()
+    countCompletedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
     
-    if countMachinesInside != 0:
-        machinesCompletedList = []
+    if countCompletedRooms != 0:
+        
         machinesCompleted= Acceso.objects.filter(alumnoA=user,completed=True)
         for machine in machinesCompleted:
             maquinaIndividual = Maquina.objects.get(pk=machine.maquinaA.pk)
             machinesCompletedList.append(maquinaIndividual)
 
         
-    countCompletedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
+    
     rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
     context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompletedList}
     
@@ -79,13 +83,38 @@ def userProfile(request, id):
 @login_required(login_url='login')
 def ranking(request):
     
+    count=0
+    page_objO=[]
     listaUsuarios = User.objects.all()
     listaUsuariosOrdenada = listaUsuarios.order_by('-alumno__points')
-    paginator = Paginator(listaUsuariosOrdenada, 3)
+    myFilter = UserFilter(request.GET, queryset=listaUsuariosOrdenada)
+    
+    listaUsuariosOrdenadaFiltrada = myFilter.qs
+    print(listaUsuariosOrdenadaFiltrada)
+
+    if listaUsuariosOrdenadaFiltrada.count() == 1: #en caso de que se haya filtrado y solo haya un usuario se recorre la lista para calcular cual es su posicion
+        for iterator in listaUsuariosOrdenada:
+            count+=1
+            if iterator.username == listaUsuariosOrdenadaFiltrada[0].username:
+                print(count)
+                iterator.alumno.position = count
+                page_objO.append(iterator)
+                break
+    else:                                       #en caso de que no se filtre y se muestren todos los usuarios se calcula su posicion para todos
+        for iterator in listaUsuariosOrdenadaFiltrada:
+            count+=1
+            iterator.alumno.position=count
+            page_objO.append(iterator)
+
+    
+    paginator = Paginator(page_objO, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    
+        
+    # print(listaUsuariosOrdenada)
     #lista_alumnos_ordenada = lista_alumnos.order_by('-puntos')
-    context = {"listaUsuariosOrdenada":listaUsuariosOrdenada,'page_obj': page_obj, 'paginator':paginator}
+    context = {"listaUsuariosOrdenada":listaUsuariosOrdenada,'page_obj': page_obj, 'paginator':paginator, 'myFilter':myFilter}
     return render(request, 'accounts/ranking.html',context)
 
 
@@ -103,7 +132,8 @@ def maquinas(request, nombre_maquina_url=None):
 
     if nombre_maquina_url != None: #si se le pasa como argumento el nombre de la maquina
         
-
+        #print(timezone.now())
+        # print(datetime.datetime.now())
         maquina_individual = Maquina.objects.get(nombre_maquina=nombre_maquina_url) 	#esto quiere decir que a la url se le pasa la clave primaria de la maquina
         
         #seleccionamos los datos globales de la maquina
@@ -114,6 +144,8 @@ def maquinas(request, nombre_maquina_url=None):
         
         if Acceso.objects.filter(alumnoA=current_user, maquinaA=maquina_individual).exists(): #esto lo hacemos para evitar errores
             acceso = Acceso.objects.get(alumnoA=current_user, maquinaA=maquina_individual)
+            # print(acceso.accesed_date)
+            # print(timezone.now())
         else:
             pass
         if request.method == 'POST':        #si se hac un post, siginfica que se estan mandando flags
@@ -122,7 +154,11 @@ def maquinas(request, nombre_maquina_url=None):
             urlMachine = '/maquinas/'
             urlMachine += nombre_maquina_url
 
-            if flagUserInput == maquina_individual.user_flag:
+            if request.POST.get('restart') != None:
+                
+                messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen todos los servicios')
+
+            elif flagUserInput == maquina_individual.user_flag:
                 #modificar el valor user_flag de la tabla acceso
                 
                 if acceso.user_flag == True:
@@ -134,10 +170,12 @@ def maquinas(request, nombre_maquina_url=None):
                     alumnoBD.save()
                     if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True: #comprobamos si al meter la flag ha completado ya la maquina
                         acceso.completed = True
+                        
                         acceso.save()
                         alumnoBD.points += 50
                         alumnoBD.save()
                         messages.success(request, '¡Enhorabuena, has completado el reto +100 puntos!')
+                        
                         
                     else:
                         messages.success(request, '¡Genial has acertado, +50 puntos!')
@@ -181,6 +219,22 @@ def maquinas(request, nombre_maquina_url=None):
     else: #si no se le pasa ninguna maquina se muestran todas las maquinas
         context = {'lista_maquinas':maquinas} 						#este es el diccionario que le pasamos a la url 
     return render(request, 'accounts/maquinas.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def addMachine(request):
+    
+    if request.method == 'POST':
+
+        machineForm = AddMachinesForm(request.POST, request.FILES)
+        if machineForm.is_valid():
+            machineForm.save()
+            messages.success(request, '¡Maquina añadida con éxito!')
+            return redirect('maquinas')
+    else:
+        machineForm = AddMachinesForm()
+    context = {'machineForm':machineForm}
+    return render(request, 'accounts/addMachine.html',context)
 
 @login_required(login_url='login')
 def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando le da el alumno a acceder a la maquina desde /machines/<nombreMaquina> creamos la relación muchos a muchos entre el usuario y la maquina
@@ -256,8 +310,12 @@ def registrarse(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            newAlumno=form.save()
             username = form.cleaned_data.get('username')
+
+            group = Group.objects.get(name='alumno') #añadimos al alumno al grupo alumno
+            newAlumno.groups.add(group)
+            # if request.user.is_staff
             messages.success(request, f'Usuario {username} creado')
             #Generamos el archivo openvpn para el alumno
             #comando equivalente a docker run -v hacker-machines-openvpn:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full username nopass
@@ -284,7 +342,7 @@ def registrarse(request):
             alumnoCreated = Alumno.objects.get(user=userCreated)
             alumnoCreated.openvpnFile = '/media/openvpn/'+username+'.ovpn'
             alumnoCreated.save()
-            return redirect('login')
+            return redirect('home')
         else:
             messages.info(request, 'Completa correctamente los campos')
     else:
@@ -293,32 +351,3 @@ def registrarse(request):
     return render(request, 'accounts/registrarse.html',contexto)
 
 
-# def registrarse(request):
-
-# 	#if request.user.is_authenticated: #esto se usa para comprobar que si está autentificado no pueda acceder a registrarse
-# 	#	return redirect('home')
-# 	#else:
-	
-		
-# 	if request.method == 'POST':
-# 		form = CreateUserForm(request.POST)
-# 		if form.is_valid():
-#             user = form.save()
-#             username = form.cleaned_data.get('username')
-#             messages.success(request, 'El usuario ' + username + ' ha sido creado correctamente')
-#             return redirect('login')
-
-# 	else:
-# 		form = CreateUserForm()
-
-# 	contexto = {'form':form}			
-# 	return render(request, 'accounts/registrarse.html', contexto)
-
-# user = form.save()
-#             username = form.cleaned_data['username']
-#             # userCreated = User.objects.get(username=username)
-#             # alumnoBD = Alumno.objects.get(user=userCreated)
-
-#             messages.success(request, f'Usuario {username} creado')
-
-# 			return redirect('login')

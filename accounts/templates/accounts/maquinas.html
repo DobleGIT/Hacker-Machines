@@ -3,9 +3,31 @@
 
 {% block content %}
 
+    
+
     {% if lista_maquinas %}
+    <div class="container-fluid p-4" id="rowTopOpenvpn">
+        <img src="/static/images/1106631.png"  height=130px width=130px class="rounded-circle" id="openvpnPhotho"/>
+        
+        <div class="row gy-4 me-5">
+            <h1 class="display-5  text-light" id="openvpnTitle">Laboratorio Virtual</h1>
+            <p class="text-sm-start text-light" id="openvpnDescription">Aquí tienes la lista de nuestras máquinas preparadas para que los hackers como tú rompan su seguridad, eso si puedes conseguirlo 😏 </p>
+        </div>
+        
+    </div>
     <br> 
-        <main role="main" class="container">
+        
+        
+        <main role="main" class="container" >
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+			{% endif %}
+            
             <div class="row">
                 <div class="col">
                                    
@@ -17,7 +39,7 @@
                                     <tr>
                                         <th>Máquina</th>
                                         <th>Categoría</th>
-                                        
+                                        <th>Fecha Creada</th>
                                         <th>Dirección IP</th>
                                         
                                         
@@ -40,7 +62,7 @@
                                                 <p class="fw-normal mb-1">{{i.categoria}}</p>
                                                 
                                                 </td>
-                                                
+                                                <td>{{i.dia_creada|date}}</td>
                                                 <td>{{i.ip}}</td>
                                                 
                                                 
@@ -53,8 +75,15 @@
                             
                 </div>
             </div>
+            <br>
+        {% if request.user.is_staff%}
+            <a class="btn btn-primary ms-3" href="{% url 'addMachine'%}" role="button">Añadir Máquina</a>
+        {% endif %}
                 
         </main>
+
+
+       
 
      {% else %}  {% comment %} Esto se muestra si estas en maquinas/UNAMAQUINA {% endcomment %}
 
@@ -194,6 +223,27 @@
                      
                         </form>
                     </div>
+                </div>
+                <br/>
+
+                <div class="card">
+                    <div class="card-header">
+                      ¿Tienes problemas con la máquina?
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <h5 class="card-title">Reiniciar el reto</h5> 
+                            <p class="card-text">Si la máquina no funciona prueba a reinciarla pulsando el siguiente botón, después espera unos minutos a que se termine de iniciar</p>
+                        </div>
+                        <br/>
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <div class="input" name="restart">
+                                <button type="submit" class="btn btn-danger" name="restart" >Reiniciar Reto</button>
+                            </div>
+                        </form>
+                    </div>
+                    
                 </div>
                 <br/>
             </div>

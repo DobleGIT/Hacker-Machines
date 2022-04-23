@@ -32,3 +32,23 @@
     border-width: 1px;
     border-color: rgb(34, 34, 34);
 }
+#machineImages{
+    width: 100%;
+    max-height: 100px;
+    object-fit: contain;
+    padding: 10px
+}
+
+#prueba{
+    height: 160px;
+}
+
+#maquinasCompletadas{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 0;
+    margin-left: 0;
+    background-color: #343a40;
+    border: 1px solid #000;
+}

@@ -16,7 +16,7 @@ class Alumno(models.Model):
     points = models.IntegerField(default=0)
     profile_image = models.ImageField(default='images/profileImages/foto_perfil.png', upload_to='images/profileImages/')
     openvpnFile = models.FileField(upload_to='openvpn/',null=True) #cambiar el default
-
+    position = models.IntegerField(default=0)
     #accessed_machines = models.ManyToManyField('Maquina', through='Acceso')
     
 
@@ -81,6 +81,7 @@ class Acceso(models.Model):
     alumnoA = models.ForeignKey(User, on_delete=models.CASCADE)
     maquinaA = models.ForeignKey(Maquina, on_delete=models.CASCADE)
     accesed_date = models.DateTimeField(auto_now_add=True)
+    finish_date = models.DateTimeField(null=True)
     user_flag = models.BooleanField(default=False)
     root_flag = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)

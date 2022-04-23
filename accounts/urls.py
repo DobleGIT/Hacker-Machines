@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('maquinas/', views.maquinas, name="maquinas"),
     path('maquinas/<str:nombre_maquina_url>', views.maquinas, name="maquinas"),
+    path('addMachine/', views.addMachine, name="addMachine"),
     path('home/', views.home, name="home"),
     path('logout/', views.logoutUser, name='logout'),
     path('login/', views.loginUsername, name='login'),
