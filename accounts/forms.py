@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from accounts.models import Alumno, Maquina
+from accounts.models import Alumno, Maquina, Category
 
 
 class CreateUserForm(UserCreationForm): #es una modificacion de Usercreation para poner el email... etcs
@@ -34,4 +34,12 @@ class AlumnoUpdateForm(forms.ModelForm):
 class AddMachinesForm(forms.ModelForm):
     class Meta:
         model = Maquina
-        fields = ['nombre_maquina','categoria','descripcion','ip','user_flag','root_flag','image_machine']
+        fields = ['nombre_maquina','categoria','estado','descripcion','ip','user_flag','root_flag','image_machine']
+
+class AddCategoriesForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['nombre']
+
+
+    

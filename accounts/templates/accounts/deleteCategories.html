@@ -23,25 +23,29 @@
                 </div>
             {% endfor %}
 		{% endif %}
+
         
         <div class="card">
             <div class="card-header">
-                Añadir Máquina
+                Borrar Categoría
             </div>
             <div class="card-body">               
                 
-                <form method="POST" action="" enctype="multipart/form-data">
+                <h5 class="card-title text-center">¿Quieres eliminar la categoría {{categoria.nombre|upper}}?</h5>
+                <br> 
+                <form action="{% url 'deleteCategories' categoria.nombre  %}" method="POST">
+				
                     {% csrf_token %}
-                    {{machineForm | crispy}}
-                    <!-- Save changes button-->
-                    <button class="btn btn-primary" type="submit">Añadir Máquina</button>
+                    <div class="text-center">
+                        <a class="btn btn-danger" href="{% url 'categories' %}" style="margin-right: 17px;">Cancelar</a>
+        
+                        <button class="btn btn-primary" type="submit">Eliminar</button>
+                    </div>
+                    
                 </form>
 
             </div>
         </div>
-        <br> 
-        
-        <br>
         
     </div>
 

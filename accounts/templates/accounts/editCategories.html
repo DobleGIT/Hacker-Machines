@@ -26,22 +26,21 @@
         
         <div class="card">
             <div class="card-header">
-                Añadir Máquina
+                Modificar Categoría
             </div>
             <div class="card-body">               
                 
                 <form method="POST" action="" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{machineForm | crispy}}
+                    {{categoryForm | crispy}}
                     <!-- Save changes button-->
-                    <button class="btn btn-primary" type="submit">Añadir Máquina</button>
+                    <button class="btn btn-primary" type="submit">Guardar Cambios</button>
                 </form>
 
             </div>
         </div>
         <br> 
-        
-        <br>
+
         
     </div>
 

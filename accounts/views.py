@@ -13,8 +13,8 @@ from django.utils import timezone
 from .models import *
 from .decorators import allowed_users #allowed_users es usado para controlar los grupos y permisos para acceder a determinadas paginas
 from django.core.paginator import Paginator
-import docker, datetime
-from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm, AddMachinesForm
+import docker, datetime, os
+from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm, AddCategoriesForm, AddMachinesForm
 from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
 from .filters import UserFilter                 #filtro para buscar por usuarios
 
@@ -154,8 +154,14 @@ def maquinas(request, nombre_maquina_url=None):
             urlMachine = '/maquinas/'
             urlMachine += nombre_maquina_url
 
-            if request.POST.get('restart') != None:
-                
+            if request.POST.get('restart') != None: #si se ha pulsado el botón de reinciar
+                #eso hacerlo asi si se ejecuta en mi pc
+                comandReset = 'vboxmanage controlvm' + ' ' + nombre_maquina_url + ' ' + 'reset'
+                os.system(comandReset)
+
+                #esto ejecutarlo asi si está en la maquina virtual
+                comandReset = "ssh jaime@192.168.1.136 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
+                print(comandReset)
                 messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen todos los servicios')
 
             elif flagUserInput == maquina_individual.user_flag:
@@ -230,11 +236,91 @@ def addMachine(request):
         if machineForm.is_valid():
             machineForm.save()
             messages.success(request, '¡Maquina añadida con éxito!')
-            return redirect('maquinas')
+            return redirect('addMachine')
+
     else:
         machineForm = AddMachinesForm()
     context = {'machineForm':machineForm}
     return render(request, 'accounts/addMachine.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def editMachine(request, nombre_maquina_url):
+
+    maquina = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
+    if request.method == 'POST':
+        machineForm = AddMachinesForm(request.POST, request.FILES, instance=maquina)
+        if machineForm.is_valid():
+            machineForm.save()
+            messages.success(request, '¡Maquina editada con éxito!')
+            return redirect('maquinas')
+    else:
+        machineForm = AddMachinesForm(instance=maquina)
+    context = {'machineForm':machineForm}
+    return render(request, 'accounts/editMachine.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def deleteMachine(request, nombre_maquina_url):
+
+    maquina = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
+    if request.method == 'POST':
+        maquina.delete()
+        messages.success(request, '¡Maquina eliminada con éxito!')
+        return redirect('maquinas')
+    context = {'maquina':maquina}
+    return render(request, 'accounts/deleteMachine.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def categories(request):
+    
+    categories = Category.objects.all()
+    context = {'categories':categories}
+    return render(request, 'accounts/categories.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def addCategories(request):
+        
+    if request.method == 'POST':
+        categoryForm = AddCategoriesForm(request.POST)
+        if categoryForm.is_valid():
+            categoryForm.save()
+            messages.success(request, '¡Categoría añadida con éxito!')
+            return redirect('categories')
+    else:
+        categoryForm = AddCategoriesForm()
+    context = {'categoryForm':categoryForm}
+    return render(request, 'accounts/addCategories.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def editCategories(request, nombre_categoria_url):
+
+    categoria = Category.objects.get(nombre=nombre_categoria_url)
+    if request.method == 'POST':
+        categoryForm = AddCategoriesForm(request.POST, instance=categoria)
+        if categoryForm.is_valid():
+            categoryForm.save()
+            messages.success(request, '¡Categoría editada con éxito!')
+            return redirect('categories')
+    else:
+        categoryForm = AddCategoriesForm(instance=categoria)
+    context = {'categoryForm':categoryForm}
+    return render(request, 'accounts/editCategories.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def deleteCategories(request, nombre_categoria_url):
+    
+    categoria = Category.objects.get(nombre=nombre_categoria_url)
+    if request.method == 'POST':
+        categoria.delete()
+        messages.success(request, '¡Categoría eliminada con éxito!')
+        return redirect('categories')
+    context = {'categoria':categoria}
+    return render(request, 'accounts/deleteCategories.html', context)
 
 @login_required(login_url='login')
 def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando le da el alumno a acceder a la maquina desde /machines/<nombreMaquina> creamos la relación muchos a muchos entre el usuario y la maquina

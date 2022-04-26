@@ -41,6 +41,7 @@
                                         <th>Categoría</th>
                                         <th>Fecha Creada</th>
                                         <th>Dirección IP</th>
+                                        <th></th>
                                         
                                         
                                     </tr>
@@ -59,12 +60,15 @@
                                                 </div>
                                                 </td>
                                                 <td>
-                                                <p class="fw-normal mb-1">{{i.categoria}}</p>
+                                                <p class="fw-normal mb-1">{{i.categoria.nombre}}</p> 
                                                 
                                                 </td>
                                                 <td>{{i.dia_creada|date}}</td>
                                                 <td>{{i.ip}}</td>
-                                                
+                                                <td>
+                                                    <a href="{% url 'editMachine' i.nombre_maquina %}" class="btn btn-success btn-sm"> Editar </a>
+                                                    <a href="{% url 'deleteMachine' i.nombre_maquina %}" class="btn btn-danger btn-sm" style="margin-left:10px" > Borrar </a>
+                                                </td>
                                                 
                                             </tr>
                                         {% endfor %}
@@ -78,6 +82,7 @@
             <br>
         {% if request.user.is_staff%}
             <a class="btn btn-primary ms-3" href="{% url 'addMachine'%}" role="button">Añadir Máquina</a>
+            <a class="btn btn-primary ms-3" href="{% url 'categories'%}" role="button">Modificar Categorías</a>
         {% endif %}
                 
         </main>

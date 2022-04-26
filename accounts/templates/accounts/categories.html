@@ -1,0 +1,75 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+
+{% block content %}
+
+    
+
+    {% if categories %}
+        <div class="container-fluid p-4" id="rowTopOpenvpn">
+            <img src="/static/images/1106631.png"  height=130px width=130px class="rounded-circle" id="openvpnPhotho"/>
+            
+            <div class="row gy-4 me-5">
+                <h1 class="display-5  text-light" id="openvpnTitle">Laboratorio Virtual</h1>
+                <p class="text-sm-start text-light" id="openvpnDescription">Aquí tienes la lista de nuestras máquinas preparadas para que los hackers como tú rompan su seguridad, eso si puedes conseguirlo 😏 </p>
+            </div>
+            
+        </div>
+        <br> 
+        
+        <main role="main" class="container" >
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+			{% endif %}
+            
+            <div class="row">
+                <div class="col">
+                                   
+                    <div class="row">
+                        <div class="col-md">
+                            <br/>
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Nombre Categoría</th>
+                                        <th>Fecha Creada</th>
+                                        <th></th>
+                                    </tr>
+                                </thread>
+                                <tbody>
+                                    
+                                        {% for i in categories %}
+
+                                            <tr>
+                                                <td>
+                                                    <p class="fw-normal mb-1">{{i.nombre}}</p> 
+                                                </td>
+                                                <td>{{i.dia_creada|date}}</td>
+                                                
+                                                <td>
+                                                    <a href="{% url 'editCategories' i.nombre %}" class="btn btn-success btn-sm"> Editar </a>
+                                                    <a href="{% url 'deleteCategories' i.nombre %}" class="btn btn-danger btn-sm" style="margin-left:10px" > Borrar </a>
+                                                </td>
+                                                
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                            
+                </div>
+            </div>
+            <br>
+            <a class="btn btn-primary ms-3" href="{% url 'addCategories'%}" role="button">Añadir Categorías</a>
+            
+        </main>
+
+    {% endif %} 
+
+{% endblock content %}

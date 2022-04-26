@@ -55,7 +55,7 @@ class Maquina(models.Model):
     
     nombre_maquina = models.CharField(max_length=30, null=True, unique=True)
     estado = models.CharField(max_length=30, null=True, choices = ESTADO)
-    categoria = models.CharField(max_length=30, null=True)
+    categoria = models.ForeignKey('Category', on_delete=models.CASCADE, null=True)
     descripcion = models.CharField(max_length=1000, null=True)
     ip = models.GenericIPAddressField(null = True)
     dia_creada = models.DateTimeField(auto_now_add=True, null=True)
@@ -89,4 +89,8 @@ class Acceso(models.Model):
     def __str__(self):
         return f'{self.alumnoA} accede a {self.maquinaA}'
     
-
+class Category(models.Model):
+    nombre = models.CharField(max_length=40, null=True)
+    dia_creada = models.DateTimeField(auto_now_add=True, null=True)
+    def __str__(self):
+        return f'{self.nombre}'
