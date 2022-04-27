@@ -39,8 +39,9 @@
                                     <tr>
                                         <th>Máquina</th>
                                         <th>Categoría</th>
+                                        <th>Dificultad</th>
                                         <th>Fecha Creada</th>
-                                        <th>Dirección IP</th>
+                                        {% comment %} <th>Dirección IP</th> {% endcomment %}
                                         <th></th>
                                         
                                         
@@ -63,11 +64,13 @@
                                                 <p class="fw-normal mb-1">{{i.categoria.nombre}}</p> 
                                                 
                                                 </td>
+                                                <td>{{i.dificultad}}</td>
                                                 <td>{{i.dia_creada|date}}</td>
-                                                <td>{{i.ip}}</td>
-                                                <td>
-                                                    <a href="{% url 'editMachine' i.nombre_maquina %}" class="btn btn-success btn-sm"> Editar </a>
-                                                    <a href="{% url 'deleteMachine' i.nombre_maquina %}" class="btn btn-danger btn-sm" style="margin-left:10px" > Borrar </a>
+
+                                                
+                                                <td class="text-center">
+                                                    <a href="{% url 'editMachine' i.nombre_maquina %}" class="btn btn-success btn-sm"> <i class="bi bi-pencil"></i> Editar </a>
+                                                    <a href="{% url 'deleteMachine' i.nombre_maquina %}" class="btn btn-danger btn-sm" style="margin-left:10px" ><i class="bi bi-eraser"></i> Borrar </a>
                                                 </td>
                                                 
                                             </tr>
@@ -81,8 +84,8 @@
             </div>
             <br>
         {% if request.user.is_staff%}
-            <a class="btn btn-primary ms-3" href="{% url 'addMachine'%}" role="button">Añadir Máquina</a>
-            <a class="btn btn-primary ms-3" href="{% url 'categories'%}" role="button">Modificar Categorías</a>
+            <a class="btn btn-primary ms-3" href="{% url 'addMachine'%}" role="button"><i class="bi bi-plus-circle"></i> Añadir Máquina</a>
+            {% comment %} <a class="btn btn-primary ms-3" href="{% url 'categories'%}" role="button">Modificar Categorías</a> {% endcomment %}
         {% endif %}
                 
         </main>

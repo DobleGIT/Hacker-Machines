@@ -236,7 +236,7 @@ def addMachine(request):
         if machineForm.is_valid():
             machineForm.save()
             messages.success(request, '¡Maquina añadida con éxito!')
-            return redirect('addMachine')
+            return redirect('maquinas')
 
     else:
         machineForm = AddMachinesForm()
@@ -402,7 +402,7 @@ def registrarse(request):
             group = Group.objects.get(name='alumno') #añadimos al alumno al grupo alumno
             newAlumno.groups.add(group)
             # if request.user.is_staff
-            messages.success(request, f'Usuario {username} creado')
+            # messages.success(request, f'Usuario {username} creado')
             #Generamos el archivo openvpn para el alumno
             #comando equivalente a docker run -v hacker-machines-openvpn:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full username nopass
             client = docker.from_env()
@@ -428,6 +428,8 @@ def registrarse(request):
             alumnoCreated = Alumno.objects.get(user=userCreated)
             alumnoCreated.openvpnFile = '/media/openvpn/'+username+'.ovpn'
             alumnoCreated.save()
+
+            login(request, userCreated)
             return redirect('home')
         else:
             messages.info(request, 'Completa correctamente los campos')

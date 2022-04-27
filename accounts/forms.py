@@ -34,7 +34,7 @@ class AlumnoUpdateForm(forms.ModelForm):
 class AddMachinesForm(forms.ModelForm):
     class Meta:
         model = Maquina
-        fields = ['nombre_maquina','categoria','estado','descripcion','ip','user_flag','root_flag','image_machine']
+        fields = ['nombre_maquina','categoria','dificultad','descripcion','ip','user_flag','root_flag','image_machine']
 
 class AddCategoriesForm(forms.ModelForm):
     class Meta:

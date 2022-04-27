@@ -8,39 +8,49 @@
 	<!-- Bootstrap Links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    
+    <!-- Icons Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <!-- CSS Main-->
 	<link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/maquinas.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/openvpn.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/userProfile.css' %}">
 
+    <link rel="icon" href="{% static 'images/logo_transparentEditNo.png' %}">
 </head>
 <body>
     <title>Hacker Machines</title>
 
 
     <nav class="py-2  navbar-dark bg-dark">
-        <div class="container d-flex flex-wrap">
-            <ul class="nav me-auto">
+        <div class="container-fluid d-flex flex-wrap">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logo_transparentEditNo.png' %}" style="height:70px;" >
+            </a>
+            {% comment %} <img src="/static/images/logo_transparentEditNo.png" style="height:70px;" > {% endcomment %}
+            <ul class="nav me-auto" style="margin-left: 20px; margin-top: revert;">
                 
-                <li><a href="{% url 'home' %}" class="nav-link px-2 text-white">Home</a></li>
                 
-                <li><a href="{% url 'maquinas' %}" class="nav-link px-2 text-white">Maquinas</a></li>
-                <li><a href="{% url 'openvpn' %}" class="nav-link px-2 text-white">Open VPN</a></li>
-                <li><a href="{% url 'ranking' %}" class="nav-link px-2 text-white">Ranking</a></li>
+                {% comment %} <li><a href="{% url 'home' %}" class="nav-link px-2 text-white"><i class="bi bi-house"></i> Home</a></li> {% endcomment %}
+                
+                <li><a href="{% url 'maquinas' %}" class="nav-link px-2 text-white"><i class="bi bi-box"></i> Maquinas</a></li>
+                {% if request.user.is_staff%}
+                    <li><a href="{% url 'categories' %}" class="nav-link px-2 text-white"><i class="bi bi-book"></i> Categorías</a></li>
+                {% endif %}
+                <li><a href="{% url 'openvpn' %}" class="nav-link px-2 text-white"><i class="bi bi-download"></i> Open VPN</a></li>
+                <li><a href="{% url 'ranking' %}" class="nav-link px-2 text-white"><i class="bi bi-trophy"></i> Ranking</a></li>
             </ul>
-          <ul class="nav">
+          <ul class="nav" style="margin-top: revert;">
             {% if user.is_authenticated %}
-                <div class="dropdown text-end">
+                <div class="dropdown text-end" >
                     <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{request.user.alumno.profile_image.url}}" alt="mdo" width="45" height="45" class="rounded-circle">
+                    <img src="{{request.user.alumno.profile_image.url}}" alt="mdo" width="45" height="45" class="rounded-circle" >
                     </a>
                     <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="{% url 'userProfile' request.user.pk %}">Perfil</a></li>
-                    <li><a class="dropdown-item" href="{% url 'profile' %}">Ajustes</a></li>
+                    <li><a class="dropdown-item" href="{% url 'userProfile' request.user.pk %}"><i class="bi bi-person-fill"></i> Perfil</a></li>
+                    <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-gear"></i> Ajustes</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'logout' %}">Salir</a></li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i> Salir</a></li>
                     </ul>
                 </div>
             {% else %}
