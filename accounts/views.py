@@ -8,6 +8,7 @@ from django.contrib.auth.models import *
 from django.contrib.auth.decorators import login_required  # lo usamos para los decorators, para que no se pueda acceder a diferentes paginas sin estar loggeado 
 from django.contrib.auth.models import Group
 from django.utils import timezone
+from django.db.models.functions import Now
 
 # Create your views here.
 from .models import *
@@ -76,7 +77,7 @@ def userProfile(request, id):
         
     
     rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
-    context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompletedList}
+    context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompleted}
     
     return render(request, 'accounts/userProfile.html', context)
 
@@ -129,6 +130,10 @@ def maquinas(request, nombre_maquina_url=None):
     individualUserFlag = False
     individualRootFlag= False
     individualCompleted= False
+    acceso = []
+
+    # actualDate = timezone.now()
+    # print(actualDate)
 
     if nombre_maquina_url != None: #si se le pasa como argumento el nombre de la maquina
         
@@ -176,7 +181,26 @@ def maquinas(request, nombre_maquina_url=None):
                     alumnoBD.save()
                     if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True: #comprobamos si al meter la flag ha completado ya la maquina
                         acceso.completed = True
-                        
+                        actualDate = timezone.now()
+                        print(actualDate)
+                        acceso.finish_date = actualDate
+
+                        #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos
+                        rest = actualDate - acceso.accesed_date
+                        #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos,
+                        #se hacen todas estas conversiones para que no dan error con el split
+                        rest = actualDate - acceso.accesed_date
+                        print(rest)
+                        rest = str(rest)
+                        rest = rest.split(':')
+                        rest[2] = float(rest[2])
+                        rest[2]= f'{rest[2]:.0f}'
+                        if int(rest[0]) >= 1:
+                            acceso.days_to_finish = int(rest[0])
+                        if int(rest[1]) >= 1:
+                            acceso.hours_to_finish = int(rest[1])
+                        if int(rest[2]) >= 1:
+                            acceso.minutes_to_finish = int(rest[2])
                         acceso.save()
                         alumnoBD.points += 50
                         alumnoBD.save()
@@ -198,6 +222,25 @@ def maquinas(request, nombre_maquina_url=None):
                     alumnoBD.save()
                     if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True:
                         acceso.completed = True
+                        actualDate = timezone.now()
+                        
+                        acceso.finish_date = actualDate
+                        
+                        #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos,
+                        #se hacen todas estas conversiones para que no dan error con el split
+                        rest = actualDate - acceso.accesed_date
+                        print(rest)
+                        rest = str(rest)
+                        rest = rest.split(':')
+                        rest[2] = float(rest[2])
+                        rest[2]= f'{rest[2]:.0f}'
+                        if int(rest[0]) >= 1:
+                            acceso.days_to_finish = int(rest[0])
+                        if int(rest[1]) >= 1:
+                            acceso.hours_to_finish = int(rest[1])
+                        if int(rest[2]) >= 1:
+                            acceso.minutes_to_finish = int(rest[2])
+
                         acceso.save()
                         alumnoBD.points += 50
                         alumnoBD.save()
@@ -214,12 +257,13 @@ def maquinas(request, nombre_maquina_url=None):
             individualUserFlag = acceso.user_flag # le pasamos la user_flag y root_flag del usuario para comprobar si la ha completado ya o no
             individualRootFlag = acceso.root_flag
             individualCompleted = acceso.completed #le pasamos el valor completed del usuario para comprobar si ha completado ya o no la maquina
+            
         else:
             pass
         
 
         
-        context = {'lista_maquinas':lista_vacia, 'maquina_individual':maquina_individual, 'usersInside':usersInside, 'usersUserFlag':usersUserFlag, 'usersRootFlag':usersRootFlag, 'individualUserFlag':individualUserFlag, 'individualRootFlag':individualRootFlag, 'individualCompleted':individualCompleted}
+        context = {'lista_maquinas':lista_vacia, 'maquina_individual':maquina_individual, 'usersInside':usersInside, 'usersUserFlag':usersUserFlag, 'usersRootFlag':usersRootFlag, 'individualUserFlag':individualUserFlag, 'individualRootFlag':individualRootFlag, 'individualCompleted':individualCompleted, 'acceso':acceso}
         render(request, 'accounts/maquinas.html',context)
 
     else: #si no se le pasa ninguna maquina se muestran todas las maquinas

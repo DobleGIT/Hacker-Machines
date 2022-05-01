@@ -178,6 +178,21 @@
                         Información de la maquina
                     </div>                
                     <div class="card-body">
+
+                        {% if individualCompleted %}
+                                
+                                
+                                {% if acceso.days_to_finish%}
+                                    
+                                    <p class="card-text text-success text-center fs-4">Tiempo en completar el reto: {{acceso.days_to_finish}} días, {{acceso.hours_to_finish}} horas y {{acceso.minutes_to_finish}} minutos ⏱️​</p>
+                                {% elif acceso.hours_to_finish %}  
+                                    <p class="card-text text-success text-center fs-4">Tiempo en completar el reto: {{acceso.hours_to_finish}} horas y {{acceso.minutes_to_finish}} minutos ⏱️​</p>
+                                {% elif acceso.minutes_to_finish %}  
+                                    <p class="card-text text-success text-center fs-4"> Tiempo en completar el reto: {{acceso.minutes_to_finish}} minutos ⏱️​​</p>
+                                
+                                {% endif %}
+                                <hr>
+                            {% endif %}
                         
                         <form action="" method="POST">
                             {% csrf_token %}
@@ -228,7 +243,9 @@
                                 </div>
                                 
                             {% endif %}
-                     
+
+                            
+                                
                         </form>
                     </div>
                 </div>
