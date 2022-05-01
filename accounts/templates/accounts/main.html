@@ -44,7 +44,7 @@
             {% if user.is_authenticated %}
                 <div class="dropdown text-end" >
                     <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{request.user.alumno.profile_image.url}}" alt="mdo" width="45" height="45" class="rounded-circle" >
+                    <img src="{{request.user.alumno.profile_image.url}}" style="object-fit: cover;"alt="mdo" width="45" height="45" class="rounded-circle" >
                     </a>
                     <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                     <li><a class="dropdown-item" href="{% url 'userProfile' request.user.pk %}"><i class="bi bi-person-fill"></i> Perfil</a></li>

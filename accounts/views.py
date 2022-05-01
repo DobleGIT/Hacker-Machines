@@ -59,6 +59,7 @@ def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ
 @login_required(login_url='login')
 def userProfile(request, id):
     machinesInside=0
+    machinesCompleted=[]
     machinesCompletedList = []
     user = get_object_or_404(User, pk=id)
     userFlags = 0

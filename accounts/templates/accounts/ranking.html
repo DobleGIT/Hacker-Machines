@@ -53,20 +53,23 @@
                             
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img src="{{i.alumno.profile_image.url}}" alt="" style="width: 45px; height: 45px " id="machineImages" class="rounded-circle margin-auto"/>
+                                    <img src="{{i.alumno.profile_image.url}}" alt="" style="width: 45px; height: 45px; object-fit: cover;" class="rounded-circle margin-auto"/>
                                     <div class="ms-3">
                                     <a href="{% url 'userProfile' i.pk %}" class="fw-normal mb-1" style="margin-left:5px" > {{i.username}}</a>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p class="fw-normal mb-1">
+                                <p class="fw-normal mb-1" style="padding:10px">
                                     {{i.alumno.points}}
                                 </p>
                                 
                             </td>
                             <td>
-                                <a> {{i.alumno.position}} </a>
+                                <p class="fw-normal mb-1" style="padding:10px">
+                                    {{i.alumno.position}}
+                                </p>
+                                
                             
                             </td>
                             

@@ -20,7 +20,7 @@
                     <div class="card-body text-center">
                         {% comment %} {% if request.user.alumno.profile_image.url != NULL %} {% endcomment %}
 
-                        <img class="rounded-circle account-img" width="150px" src="{{request.user.alumno.profile_image.url}}">
+                        <img class="rounded-circle account-img" width="150px" src="{{request.user.alumno.profile_image.url}}" style="object-fit: cover;">
                         
                         {% comment %} {% else %}
     
