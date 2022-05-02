@@ -65,6 +65,7 @@ class Maquina(models.Model):
     user_flag = models.CharField(max_length=30,null=True)
     root_flag = models.CharField(max_length=30, null=True)
     image_machine = models.ImageField(default='images/machineImages/linuxLogo.png',upload_to='images/machineImages/')
+    activa= models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.nombre_maquina}'

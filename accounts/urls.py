@@ -9,7 +9,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name="home"),
-    path('maquinas/', views.maquinas, name="maquinas"),
+    path('maquinas/', views.maquinas, name="maquinas"), 
     path('maquinas/<str:nombre_maquina_url>', views.maquinas, name="maquinas"),
     path('addMachine/', views.addMachine, name="addMachine"),
     path('categories/', views.categories, name="categories"),
@@ -18,6 +18,7 @@ urlpatterns = [
     path('deleteCategories/<str:nombre_categoria_url>', views.deleteCategories, name="deleteCategories"),
     path('editMachine/<str:nombre_maquina_url>', views.editMachine, name="editMachine"),
     path('deleteMachine/<str:nombre_maquina_url>', views.deleteMachine, name="deleteMachine"),
+    path('visibleMachine/<str:nombre_maquina_url>', views.visibleMachine, name="visibleMachine"),
     path('home/', views.home, name="home"),
     path('logout/', views.logoutUser, name='logout'),
     path('login/', views.loginUsername, name='login'),

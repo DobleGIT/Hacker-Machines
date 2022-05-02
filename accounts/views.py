@@ -154,13 +154,13 @@ def maquinas(request, nombre_maquina_url=None):
             # print(timezone.now())
         else:
             pass
-        if request.method == 'POST':        #si se hac un post, siginfica que se estan mandando flags
+        if request.method == 'POST':        
             flagUserInput = request.POST.get('flagUserInput')
             flagRootInput = request.POST.get('flagRootInput')
             urlMachine = '/maquinas/'
             urlMachine += nombre_maquina_url
 
-            if request.POST.get('restart') != None: #si se ha pulsado el botón de reinciar
+            if request.POST.get('restart') != None and maquina_individual.activa: #si se ha pulsado el botón de reinciar
                 #eso hacerlo asi si se ejecuta en mi pc
                 comandReset = 'vboxmanage controlvm' + ' ' + nombre_maquina_url + ' ' + 'reset'
                 os.system(comandReset)
@@ -170,7 +170,7 @@ def maquinas(request, nombre_maquina_url=None):
                 print(comandReset)
                 messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen todos los servicios')
 
-            elif flagUserInput == maquina_individual.user_flag:
+            elif flagUserInput == maquina_individual.user_flag and maquina_individual.activa:
                 #modificar el valor user_flag de la tabla acceso
                 
                 if acceso.user_flag == True:
@@ -211,7 +211,7 @@ def maquinas(request, nombre_maquina_url=None):
                     else:
                         messages.success(request, '¡Genial has acertado, +50 puntos!')
         
-            elif flagRootInput == maquina_individual.root_flag:
+            elif flagRootInput == maquina_individual.root_flag and maquina_individual.activa:
                 #modificar el valor root_flag de la tabla acceso
                 acceso = Acceso.objects.get(alumnoA=current_user, maquinaA=maquina_individual)
                 if acceso.root_flag == True:
@@ -270,6 +270,24 @@ def maquinas(request, nombre_maquina_url=None):
     else: #si no se le pasa ninguna maquina se muestran todas las maquinas
         context = {'lista_maquinas':maquinas} 						#este es el diccionario que le pasamos a la url 
     return render(request, 'accounts/maquinas.html',context)
+
+@login_required(login_url='/login/')
+@allowed_users(allowed_roles=['admin'])
+def visibleMachine(request, nombre_maquina_url):
+    
+    maquina_individual = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
+    if maquina_individual.activa == False:
+        maquina_individual.activa = True
+        maquina_individual.save()
+        messageText= 'La maquina ' + maquina_individual.nombre_maquina + ' ha sido activada'
+        messages.success(request, messageText)
+        return redirect('maquinas')
+    else:
+        maquina_individual.activa = False
+        maquina_individual.save()
+        messageText= 'La maquina ' + maquina_individual.nombre_maquina + ' ha sido desactivada'
+        messages.success(request, messageText)
+        return redirect('maquinas')
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
