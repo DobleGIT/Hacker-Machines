@@ -19,6 +19,9 @@ from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm, AddCategori
 from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
 from .filters import UserFilter                 #filtro para buscar por usuarios
 
+import random #random y string lo usamos para generar las urls aleatorias al crear el archivo ovpn
+import string
+
 def home(request):
 	
 	return render(request, 'accounts/home.html')
@@ -420,6 +423,7 @@ def secureOpenVpnFiles(request,file):
     #     return HttpResponse(file, content_type='application/octet-stream')
     # else:
     #     return redirect('home')
+    return redirect('home')
     urlFileOpenVpn = 'openvpn/'
     urlFileOpenVpn += file
     pathPc = '/home/jaime/Escritorio/TFG/media/openvpn/'
@@ -427,7 +431,7 @@ def secureOpenVpnFiles(request,file):
     current_user = request.user
     if Alumno.objects.filter(user=current_user, openvpnFile=urlFileOpenVpn).exists(): #comprobamos que el archivo que quiere descargar es el suyo propio
         fileRead = open(pathPc, 'rb')
-        return FileResponse(fileRead, content_type='application/octet-stream')
+        return FileResponse(fileRead)
     else:
         return redirect('home')
 
@@ -479,8 +483,15 @@ def registrarse(request):
             comandoObtener = ['ovpn_getclient', username]
             cosa = client.containers.run(image=imagen,command=comandoObtener,volumes=volumenes,auto_remove=True)
             
+            #generamos una url random para que no se pueda acceder a ella desde el navegador
+            
+            characters = string.ascii_letters + string.digits
+            urlRandom = ''.join(random.choice(characters) for i in range(50))
+            
             #guardamos el archivo en el directorio de la base de datos
-            nameFile = '/home/jaime/Escritorio/TFG/media/openvpn/'+username+'.ovpn'
+            nameFile = '/home/jaime/Escritorio/TFG/media/openvpn/'+urlRandom+'/'+username+'.ovpn'
+
+            os.makedirs(os.path.dirname(nameFile)) #creamos el directorio con la .ovpn
 
             archivoOpenVpn=open(nameFile,"w")
             archivoOpenVpn.write(cosa.decode('utf-8'))
@@ -489,7 +500,7 @@ def registrarse(request):
             #guardamos en la base de datos
             userCreated = User.objects.get(username=username)
             alumnoCreated = Alumno.objects.get(user=userCreated)
-            alumnoCreated.openvpnFile = '/media/openvpn/'+username+'.ovpn'
+            alumnoCreated.openvpnFile = '/media/openvpn/'+urlRandom+'/'+username+'.ovpn'
             alumnoCreated.save()
 
             login(request, userCreated)

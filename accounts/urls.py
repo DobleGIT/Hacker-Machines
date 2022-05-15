@@ -29,7 +29,7 @@ urlpatterns = [
     path('access_to_machine/<str:nombre_maquina_url>', views.access_to_machine, name='access_to_machine'),
     path('openvpn/', views.openvpn, name='openvpn'),
     path('ranking/', views.ranking, name='ranking'),
-    #path('media/openvpn/<str:file>',views.secureOpenVpnFiles, name='secureOpenVpnFiles'),
+    path('media/openvpn/<str:file>',views.secureOpenVpnFiles, name='secureOpenVpnFiles'),
 ]
 
 
