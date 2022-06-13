@@ -66,6 +66,7 @@ class Maquina(models.Model):
     root_flag = models.CharField(max_length=30, null=True)
     image_machine = models.ImageField(default='images/machineImages/linuxLogo.png',upload_to='images/machineImages/')
     activa= models.BooleanField(default=True)
+    reboot = models.DateTimeField(null=True)
 
     def __str__(self):
         return f'{self.nombre_maquina}'

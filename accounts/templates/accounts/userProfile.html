@@ -59,9 +59,12 @@
                         <div class="card m-3" style="max-width: 540px;">
                             <div class="row g-0">
                                 <div class="col-md-4">
-                                    <a href="{% url 'maquinas' accessed.maquinaA.nombre_maquina %}">
-                                        <img src="{{accessed.maquinaA.image_machine.url}}" class="card-img-top rounded-circle"  id="machineImages" >      
-                                    </a>                            
+                                    <div id="frame">
+
+                                        <a href="{% url 'maquinas' accessed.maquinaA.nombre_maquina %}">
+                                            <img src="{{accessed.maquinaA.image_machine.url}}" class="card-img-top rounded-circle"  id="machineImages" >      
+                                        </a>     
+                                    </div>                       
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">

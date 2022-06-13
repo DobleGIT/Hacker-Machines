@@ -165,14 +165,31 @@ def maquinas(request, nombre_maquina_url=None):
 
             if request.POST.get('restart') != None and maquina_individual.activa: #si se ha pulsado el botón de reinciar
                 #eso hacerlo asi si se ejecuta en mi pc
-                comandReset = 'vboxmanage controlvm' + ' ' + nombre_maquina_url + ' ' + 'reset'
-                os.system(comandReset)
+                #comandReset = 'vboxmanage controlvm' + ' ' + nombre_maquina_url + ' ' + 'reset'
+                #os.system(comandReset)
 
                 #esto ejecutarlo asi si está en la maquina virtual
-                comandReset = "ssh jaime@192.168.1.136 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
-                print(comandReset)
-                messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen todos los servicios')
-
+                actualTime = timezone.now()
+                if maquina_individual.reboot != None:
+                    rest = actualTime - maquina_individual.reboot
+                    rest = str(rest)
+                    rest = rest.split(':')
+                    
+                    if int(rest[1]) <5: #300 segundos tienen que pasar para volver a reiniciar la maquina
+                        messages.success(request, 'El ya se está reiniciando, por favor espera a que se despliegue la máquina')
+                    else:
+                        maquina_individual.reboot = actualTime
+                        maquina_individual.save()
+                        comandReset = "ssh jaime@192.168.1.136 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
+                        os.system(comandReset)
+                        messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen la máquina')
+                else:
+                    maquina_individual.reboot = actualTime
+                    maquina_individual.save()
+                    comandReset = "ssh jaime@192.168.1.136 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
+                    os.system(comandReset)
+                    messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen la máquina')
+            
             elif flagUserInput == maquina_individual.user_flag and maquina_individual.activa:
                 #modificar el valor user_flag de la tabla acceso
                 
@@ -186,7 +203,7 @@ def maquinas(request, nombre_maquina_url=None):
                     if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True: #comprobamos si al meter la flag ha completado ya la maquina
                         acceso.completed = True
                         actualDate = timezone.now()
-                        print(actualDate)
+                        #print(actualDate)
                         acceso.finish_date = actualDate
 
                         #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos

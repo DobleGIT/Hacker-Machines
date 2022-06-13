@@ -28,6 +28,12 @@
                 {% endfor %}
 			{% endif %}
             
+            <div class="d-flex justify-content-end">
+                {% if request.user.is_staff%}
+                    <a class="btn btn-primary ms-3" href="{% url 'addMachine'%}" role="button"><i class="bi bi-plus-circle"></i> Añadir Máquina</a>
+                {% endif %}
+
+            </div>
             <div class="row">
                 <div class="col">
                                    
@@ -119,9 +125,7 @@
                 </div>
             </div>
             <br>
-            {% if request.user.is_staff%}
-                <a class="btn btn-primary ms-3" href="{% url 'addMachine'%}" role="button"><i class="bi bi-plus-circle"></i> Añadir Máquina</a>
-            {% endif %}
+            
                 
         </main>
 
