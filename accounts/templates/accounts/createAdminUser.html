@@ -1,0 +1,83 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <div class="container-fluid p-4" id="userProfileRowTop">
+        <img src="{{user.alumno.profile_image.url}}"  height=150px width=150px class="rounded-circle" id="userProfilePhoto"/>
+
+    </div>
+    <div class="container-fluid p-4" id="userProfilerowMiddle">
+        <p class="h1 text-center text-white" > {{user.username|upper}} </p>
+    </div>
+    <div class="container-fluid" id="userProfilerowDown">
+        <div class="container-fluid border-top-0" id="userProfilebarraNoti">
+            <div class="row text-center">
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{countMachinesInside}}</div>
+                    <div class="size-16 faded">Maquinas accedidas</div>
+
+                </div>
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{countCompletedRooms}}</div>
+                    <div class="size-16 faded">Maquinas completadas</div>
+
+                </div>
+
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{points}}</div>
+                    <div class="size-16 faded">Puntos totales</div>
+
+                </div>
+
+                <div class="col p-3  text-white text-center" id="barraNoti">
+                    
+                    <div class="size-30 bold" id="userProfilenumberTop">{{user.date_joined|date}}</div>
+                    <div class="size-16 faded">Fecha registro</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="container px-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+		{% endif %}
+
+            </br>
+        <div class="card">
+            <div class="card-header">
+                Hacer Administrador
+            </div>
+            <div class="card-body">               
+                
+                <h5 class="card-title text-center">¿Quieres hacer administrador a {{user.username|upper}}?</h5>
+                <br> 
+                <form action="{% url 'createAdminUser' user.pk  %}" method="POST">
+				
+                    {% csrf_token %}
+                    <div class="text-center">
+                        <a class="btn btn-danger" href="{% url 'userProfile' user.pk %}" style="margin-right: 17px;">Cancelar</a>
+        
+                        <button class="btn btn-primary" type="submit">Aceptar</button>
+                    </div>
+                    
+                </form>
+
+            </div>
+        </div>
+        
+    </div>
+
+    
+
+{% endblock content %}

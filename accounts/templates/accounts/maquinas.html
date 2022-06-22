@@ -132,8 +132,9 @@
      {% else %}  {% comment %} Esto se muestra si estas en maquinas/UNAMAQUINA {% endcomment %}
 
         <div class="container-fluid p-4" id="rowTop">
-            <img src="{{maquina_individual.image_machine.url}}"  height=150px width=150px class="rounded-circle" id="machinePhotho"/>
-
+            <div id="frame">
+                <img src="{{maquina_individual.image_machine.url}}" class="card-img-top rounded-circle"  id="machineImages"/>
+            </div>
         </div>
         <div class="container-fluid p-4" id="rowMiddle">
             <p class="h1 text-center text-white" > {{maquina_individual.nombre_maquina|upper}} </p>

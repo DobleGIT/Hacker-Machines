@@ -43,9 +43,37 @@
             </div>
         </div>
     </div>
-    
+    {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+		{% endif %}
     <br/>
+    
+    
+    
+    
     <div class="container px-5 " >
+        <div class="d-flex justify-content-end">
+            
+            {% if request.user.is_staff and request.user != user%}
+                
+            <a class="btn btn-danger ms-3" href="{% url 'deleteUser' user.pk%}" role="button"><i class="bi bi-eraser"></i> Eliminar Usuario</a>
+
+                {% if user.is_staff%}
+                    <a class="btn btn-danger ms-3" href="{% url 'deleteAdminUser' user.pk%}" role="button"><i class="bi bi-eraser"></i> Quitar Rol Administrador</a>
+
+                {% else %}
+
+                    <a class="btn btn-primary ms-3" href="{% url 'createAdminUser' user.pk%}" role="button"><i class="bi bi-capslock"></i> Hacer Administrador</a>
+               
+                {% endif %}
+            {% endif %}
+        
+        </div>
+    </br>
         {% if machinesCompleted %}
         <p class="h2 text-center">Máquinas que el usuario ha completado</p>
         

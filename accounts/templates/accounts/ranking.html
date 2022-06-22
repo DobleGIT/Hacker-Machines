@@ -21,7 +21,13 @@
 
         <div class="container">
 
-            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+		    {% endif %}
                 <form method="get">
                     
                     <div class="row justify-content-evenly">

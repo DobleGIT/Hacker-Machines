@@ -3,26 +3,48 @@
 {% block content %}
 
 	<div class="container-fluid p-4" id="rowTopHome">
-		<div class="row align-items-start">
-			<div class="col">
-				<div class="row gy-5">
-					<h1 class="display-5  text-light" id="openvpnTitle">Bienvenido a Hacker Machines</h1>
-					
-				</div>
-				
-				<div class="row gy-5">
-					<p class="text-sm-start text-light" id="openvpnDescription"> Si es la primera vez que utilizas esta plataforma te recomendamos que veas este video tutorial de como conctarte a los retos.</p>
-					</iframe>		
-				</div>
-			</div>
-			
-			
-			<div class="col">
-				<iframe width="300" height="300" src="https://www.youtube.com/embed/tgbNymZ7vqY">
 
-			</div>
-		</div>
+		<div class="container text-center">
+			<img src="/static/images/logo_transparentEdit.png" height=258px width=393px/>	
+		</div>	
 
 	</div>
+
+	<div class="container p-4" >
+	</br>
+        <div class="card">
+                         
+            <div class="card-body">
+                <h5 class="card-title">¿Qué es Hacker Machines? 🤔​</h5> 
+                <p class="card-text"> Se trata de una plataforma en español para poder aprender ciberseguridad. El funcionamiento es el siguiente, 
+					a través de una VPN tienes acceso a nuestros máquinas virtuales, estas tienen una serie de vulnerabilidades que tú tienes que descubrir y aprovecharte de ellas para poder hackear el sistema 👨‍💻​. </br>
+					Para resolver los retos hacen falta dos "flags", una la consigues cuando consigues vulnerar la máquina y conseguir privilegios de usuario, esta flag se llama "user flag" y 
+					normalmente se encuentra en un archivo que esté a la vista. La segunda flag se llama "root flag", ya que esta se consigue cuando logras escalar privilegios y conseguir permisos de Super Usuario en la máquina.
+                </p>
+                
+			</div> 
+		</div>
+	</br>
+		<div class="card">
+			<div class="card-body">
+                <h5 class="card-title">¿Cómo accedo a los retos? ​🤓​</h5>  
+                <p class="card-text">
+					Para acceder a los retos es muy sencillo, lo único que tienes que hacer es conectarte a nuestra VPN, para ello tienes que dirigirte al siguiente <a href="{% url 'openvpn' %}" class="text-decoration-none"  target="_blank">link</a>
+					 y descargarte el archivo de configuración.</br>
+					Dependiendo del sistema operativo que estés usando vas a tener que instalar el programa <a href="https://openvpn.net/community-downloads/" class="text-decoration-none"  target="_blank">OpenVPN</a>.
+				</br>
+					Una vez hecho esto ejecutas el archivo de configuración y te diriges a nuestra lista de <a href="{% url 'maquinas' %}" class="text-decoration-none"  target="_blank">máquinas</a> disponibles y accedes a la que más te apetezca. </br>
+					Y por fin viene lo más divertido, se te habilitará la IP del reto y sólo queda que inicies el escaneo para ir encontrando las vulnerabilidades.
+			</br>
+					¡Mucha Suerte! 😸​
+                    
+                    
+                </p>
+            </div>
+            
+            
+        </div>
+
+    </div>
 
 {% endblock content %}

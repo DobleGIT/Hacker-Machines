@@ -39,9 +39,6 @@
     object-fit: cover;
 }
 
-#prueba{
-    height: 160px;
-}
 
 #maquinasCompletadas{
     display: flex;
@@ -54,8 +51,8 @@
 }
 
 #frame{
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     margin: auto;
     border-radius:50%;
     border: 1px;

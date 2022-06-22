@@ -406,6 +406,108 @@ def deleteCategories(request, nombre_categoria_url):
     return render(request, 'accounts/deleteCategories.html', context)
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createAdminUser(request, id):
+
+    machinesInside=0
+    machinesCompleted=[]
+    machinesCompletedList = []
+    user = get_object_or_404(User, pk=id)
+    userFlags = 0
+    rootFlags = 0
+    alumno = Alumno.objects.get(user=user)
+    countMachinesInside = Acceso.objects.filter(alumnoA=user).count()
+    countCompletedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
+    
+    if countCompletedRooms != 0:
+        
+        machinesCompleted= Acceso.objects.filter(alumnoA=user,completed=True)
+        for machine in machinesCompleted:
+            maquinaIndividual = Maquina.objects.get(pk=machine.maquinaA.pk)
+            machinesCompletedList.append(maquinaIndividual)
+
+    rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
+    context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompleted}
+    
+    if request.method == 'POST':
+        group = Group.objects.get(name='admin') #lo añadimos al grupo de admin
+        user.groups.add(group)
+        user.is_staff=True
+        user.save()
+        
+        messages.success(request, '¡Usuario elevado a administrador!')
+        return render(request, 'accounts/userProfile.html', context)
+
+    return render(request, 'accounts/createAdminUser.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def deleteAdminUser(request, id):
+    
+    machinesInside=0
+    machinesCompleted=[]
+    machinesCompletedList = []
+    user = get_object_or_404(User, pk=id)
+    userFlags = 0
+    rootFlags = 0
+    alumno = Alumno.objects.get(user=user)
+    countMachinesInside = Acceso.objects.filter(alumnoA=user).count()
+    countCompletedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
+    
+    if countCompletedRooms != 0:
+        
+        machinesCompleted= Acceso.objects.filter(alumnoA=user,completed=True)
+        for machine in machinesCompleted:
+            maquinaIndividual = Maquina.objects.get(pk=machine.maquinaA.pk)
+            machinesCompletedList.append(maquinaIndividual)
+
+    rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
+    context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompleted}
+    if request.method == 'POST':
+        group = Group.objects.get(name='admin') #lo añadimos al grupo de admin
+        user.groups.remove(group)
+        user.is_staff=False
+        user.save()
+        
+        messages.success(request, '¡Usuario actualizado!')
+        return render(request, 'accounts/userProfile.html', context)
+
+    return render(request, 'accounts/deleteAdminUser.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def deleteUser(request, id):
+    
+    machinesInside=0
+    machinesCompleted=[]
+    machinesCompletedList = []
+    user = get_object_or_404(User, pk=id)
+    userFlags = 0
+    rootFlags = 0
+    alumno = Alumno.objects.get(user=user)
+    countMachinesInside = Acceso.objects.filter(alumnoA=user).count()
+    countCompletedRooms = Acceso.objects.filter(alumnoA=user, completed=True).count()
+    
+    if countCompletedRooms != 0:
+        
+        machinesCompleted= Acceso.objects.filter(alumnoA=user,completed=True)
+        for machine in machinesCompleted:
+            maquinaIndividual = Maquina.objects.get(pk=machine.maquinaA.pk)
+            machinesCompletedList.append(maquinaIndividual)
+
+        
+    
+    rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
+    context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompleted}
+    if request.method == 'POST':
+        user.delete()
+        
+        messages.success(request, '¡Usuario Eliminado Correctamente!')
+        return redirect('ranking')
+
+    return render(request, 'accounts/deleteUser.html', context)
+
+@login_required(login_url='login')
 def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando le da el alumno a acceder a la maquina desde /machines/<nombreMaquina> creamos la relación muchos a muchos entre el usuario y la maquina
     #comprobar que no se puede acceder dos veces a la mierda esta
     urlMachine = '/maquinas/'
@@ -464,7 +566,7 @@ def loginUsername(request):     #la pagina del login
 
 		if user is not None:		#si se autentifica bien 
 			login(request, user)
-			return redirect('dashboard')
+			return redirect('home')
 		else:
 			messages.info(request, 'El usuario o la password es incorrecta') #ESTO NO FUNCIONA ARREGLARLO
 		
