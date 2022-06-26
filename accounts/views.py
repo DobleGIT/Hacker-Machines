@@ -33,8 +33,6 @@ def dashboard(request):
 	user = User.objects.all()
 	context = {'user_list':user}
 
-
-
 	return render(request, 'accounts/dashboard.html',context)
 
 
@@ -57,7 +55,7 @@ def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ
 		user_form = UserUpdateForm(instance = request.user)
 	
 	context={'alumno_form':alumno_form, 'user_form':user_form}
-	return render(request, 'accounts/profile.html',context)
+	return render(request, 'accounts/EditProfile.html',context)
 
 @login_required(login_url='login')
 def userProfile(request, id):
@@ -568,9 +566,8 @@ def loginUsername(request):     #la pagina del login
 			login(request, user)
 			return redirect('home')
 		else:
-			messages.info(request, 'El usuario o la password es incorrecta') #ESTO NO FUNCIONA ARREGLARLO
-		
-	
+			messages.warning(request, 'El Usuario o la Contraseña es incorrecta') #ESTO NO FUNCIONA ARREGLARLO
+            
 	return render(request, 'accounts/login.html',contexto)
 
 def logoutUser(request):	#cuando el usuario pulsa el boton de logout se le direcciona a la pagina /logout que llama al metodo logout para hacer el que? pues si, el logout

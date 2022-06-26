@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django import forms
 
@@ -41,5 +41,11 @@ class AddCategoriesForm(forms.ModelForm):
         model = Category
         fields = ['nombre']
 
+class PasswordChangingForm(PasswordChangeForm):	
+    new_password1 = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    new_password2 = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    class Meta:
+        model = User
+        fields = ('new_password1','new_password2')
 
     
