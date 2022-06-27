@@ -269,7 +269,7 @@ def maquinas(request, nombre_maquina_url=None):
                         messages.success(request, '¡Genial has acertado, +50 puntos!')
 
             else:
-                messages.warning(request, 'La flag es incorrecta')
+                messages.warning(request, 'La FLAG introducida es incorrecta')
                 
         if Acceso.objects.filter(alumnoA=current_user, maquinaA=maquina_individual).exists(): 
             acceso = Acceso.objects.get(alumnoA=current_user, maquinaA=maquina_individual)

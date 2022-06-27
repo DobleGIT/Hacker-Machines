@@ -8,3 +8,4 @@ from .models import *
 admin.site.register(Alumno)
 admin.site.register(Maquina)
 admin.site.register(Category)
+admin.site.register(Acceso)
