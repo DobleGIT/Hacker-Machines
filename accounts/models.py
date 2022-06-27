@@ -58,7 +58,7 @@ class Maquina(models.Model):
     
     nombre_maquina = models.CharField(max_length=30, null=True, unique=True)
     dificultad = models.CharField(max_length=30, null=True, choices = DIFICULTAD)
-    categoria = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
+    categoria = models.ManyToManyField('Category')#, on_delete=models.SET_NULL, null=True)
     descripcion = models.CharField(max_length=1000, null=True)
     ip = models.GenericIPAddressField(null = True)
     dia_creada = models.DateTimeField(auto_now_add=True, null=True)
