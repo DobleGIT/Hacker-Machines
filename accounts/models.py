@@ -6,9 +6,6 @@ from django.contrib.auth.models import User
 from PIL import Image       #Lo usamos para redimensionar la imagen de perfil
 
 # Create your models here.
-# jaimeAdmin
-# SuperJaime23
-
 
 class Alumno(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)  #creamos una relacion entre la tabla alumno y la de usuarios
@@ -17,7 +14,7 @@ class Alumno(models.Model):
     profile_image = models.ImageField(default='images/profileImages/foto_perfil.png', upload_to='images/profileImages/')
     openvpnFile = models.FileField(upload_to='openvpn/',null=True) #cambiar el default
     position = models.IntegerField(default=0)
-    #accessed_machines = models.ManyToManyField('Maquina', through='Acceso')
+    
     
 
     def __str__(self):
@@ -31,22 +28,13 @@ class Alumno(models.Model):
         """
         machines_ids = Acceso.objects.filter(alumnoA=self.user).values_list('maquinaA', flat=True)
         return Maquina.objects.filter(id__in=machines_ids)
-    
-
-
-    # def save(self):           esto es para redimensionar las imagenes que se suben pero no funciona y me da pereza ver el por que
-    #     super().save()
-
-    #     img = Image.open(self.profile_image.path)
-
-    #     if img.height > 300 or img.width < 300:
-    #         output_size = (300,300)
-    #         img.thumbnail(output_size)
-    #         img.save(self.profile_image.path)
 
 
 #cuando se crea un nuevo usuario se llama una señal en signals.py que crea un alumno
 
+# The class Maquina is a model that has a name, a difficulty, a category, a description, an IP, a date
+# of creation, a user flag, a root flag, an image, and a boolean that indicates if the machine is
+# active or not.
 class Maquina(models.Model):
 
     DIFICULTAD = [

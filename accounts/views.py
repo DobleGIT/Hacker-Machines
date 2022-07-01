@@ -22,43 +22,59 @@ from .filters import UserFilter                 #filtro para buscar por usuarios
 import random #random y string lo usamos para generar las urls aleatorias al crear el archivo ovpn
 import string
 
+
+
+
 def home(request):
-	
+	"""
+    La función home() muestra la pantalla de inicio del sistema 
+
+    :param request: Objeto http
+    :return: El render del template home.html
+    """
 	return render(request, 'accounts/home.html')
-
-@login_required(login_url='login') #comprobamos que esté loggeado y si no es así se le manda al /login
-def dashboard(request):
-	current_user = request.user
-	#current_alumno = User.objects.get()
-	user = User.objects.all()
-	context = {'user_list':user}
-
-	return render(request, 'accounts/dashboard.html',context)
 
 
 @login_required(login_url='login') #comprobamos que esté loggeado y si no es así se le manda al /login
 def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ90L5jfldw&ab_channel=CoreySchafer
 
+    """
+    Esta funcion se utiliza para editar el perfil, se crean dos formularios uno para
+    el modelo Alumno y otro para el modelo Usuario.
+    Si el método es post se comprueban y se guardan los datos
+    Si el método es get se envían los formularios
+    
+    :param request: Objeto http
+    :return del GET: El render del template editProfile.html.
+    :return del POST: El render del template userProfile.html.
+    """
 	
 	# lo que hacemos aqui es crear dos forms que saquen solo el email y la foto de perfil en caso de que no sea POST y en caso de que lo sea see guardan los forms
-	if request.method == 'POST': #creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
-		alumno_form = AlumnoUpdateForm(request.POST, request.FILES, instance = request.user.alumno)
-		user_form = UserUpdateForm(request.POST, instance=request.user)
-		
-		if user_form.is_valid() and alumno_form.is_valid():
-			user_form.save()
-			alumno_form.save()
-			messages.success(request, f'Se ha actualizado tu perfil')
-			return redirect('profile')
-	else:
-		alumno_form = AlumnoUpdateForm(instance = request.user.alumno)		#creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
-		user_form = UserUpdateForm(instance = request.user)
-	
-	context={'alumno_form':alumno_form, 'user_form':user_form}
-	return render(request, 'accounts/EditProfile.html',context)
+    if request.method == 'POST': #creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
+        alumno_form = AlumnoUpdateForm(request.POST, request.FILES, instance = request.user.alumno)
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        
+        if user_form.is_valid() and alumno_form.is_valid():
+            user_form.save()
+            alumno_form.save()
+            messages.success(request, f'Se ha actualizado tu perfil')
+            return redirect('profile')
+    else:
+        alumno_form = AlumnoUpdateForm(instance = request.user.alumno)		#creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
+        user_form = UserUpdateForm(instance = request.user)
+    
+    context={'alumno_form':alumno_form, 'user_form':user_form}
+    return render(request, 'accounts/EditProfile.html',context)
 
 @login_required(login_url='login')
 def userProfile(request, id):
+    """
+    Muestra el perfil de un usuario.
+    
+    :param request: Objeto http
+    :param id: El id del usuario que se quiere ver
+    :return: El render del template userProfile.html
+    """
     machinesInside=0
     machinesCompleted=[]
     machinesCompletedList = []
@@ -85,7 +101,12 @@ def userProfile(request, id):
 
 @login_required(login_url='login')
 def ranking(request):
-    
+    """
+    Obtiene una lista de todos los usuarios, los ordena por puntos y los muestra por pantalla en forma de tabla.
+
+    :param request: Objeto http
+    :return: El render del template ranking.html
+    """
     count=0
     page_objO=[]
     listaUsuarios = User.objects.all()
@@ -123,7 +144,16 @@ def ranking(request):
 
 @login_required(login_url='login')
 def maquinas(request, nombre_maquina_url=None):
-
+    """
+    Si solo se le pasa un argumento, es decir, el request mostrará una lista de todas las máquinas del sistema.
+    En cambio si se le pasa un argumento va a ser el nombre de la máquina, mostrando los detalles de la misma y realizando las siguientes acciones:
+    -Si es un método POST pueden ser dos cosas:
+        1º) Si en el POST está el argumento restart se reinicia la máquina conectandose por ssh a la máquina principal donde se está ejecutando.
+        2º) Sino significa que se están enviando las respuestas del reto, por lo que comprueba si son correctas y se suman los determinados puntos
+   
+    :param request: Objeto http
+    :return: El render del template maquinas.html
+    """
     
     maquinas = Maquina.objects.all()
     current_user = request.user
@@ -145,7 +175,6 @@ def maquinas(request, nombre_maquina_url=None):
         
         #seleccionamos los datos globales de la maquina
         usersInside = Acceso.objects.filter(maquinaA=maquina_individual).count() #usuarios que han accedido a la maquina
-        #usersInside = usersInside.count()
         usersUserFlag = Acceso.objects.filter(maquinaA=maquina_individual, user_flag=True).count() #usuario que ha accedido a la maquina y que está loggeado
         usersRootFlag = Acceso.objects.filter(maquinaA=maquina_individual, root_flag=True).count() #usuario que ha accedido a la maquina y que es root        
         
@@ -290,9 +319,15 @@ def maquinas(request, nombre_maquina_url=None):
     return render(request, 'accounts/maquinas.html',context)
 
 @login_required(login_url='/login/')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def visibleMachine(request, nombre_maquina_url):
+    """
+    Si la máquina está activa, esta será desactivada, sino será activada.
     
+    :param request: Objeto http.
+    :param nombre_maquina_url: Es el nombre de la máquina que queremos activar/desactivar
+    :return: El render del template maquinas.html
+    """
     maquina_individual = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
     if maquina_individual.activa == False:
         maquina_individual.activa = True
@@ -308,9 +343,17 @@ def visibleMachine(request, nombre_maquina_url):
         return redirect('maquinas')
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def addMachine(request):
+    """
+    Si el método es POST entonces se comprueba y se añade la nueva máquina en la base de datos.
     
+    Pero si el método es GET, entonces sólo muestra el formulario para añadir una máquina.
+    
+    :param request: Objeto Http.
+    :return del GET: El render del template addMachine.html
+    :return del POST: El render del template maquinas.html
+    """
     if request.method == 'POST':
 
         machineForm = AddMachinesForm(request.POST, request.FILES)
@@ -325,9 +368,17 @@ def addMachine(request):
     return render(request, 'accounts/addMachine.html',context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def editMachine(request, nombre_maquina_url):
-
+    """
+    Si el método es POST entonces se comprueba y se edita la máquina en la base de datos, pero si
+    el método es GET, entonces sólo muestra el formulario para editar una máquina.
+    
+    :param request: Objeto Http.
+    :param nombre_maquina_url: Nombre de la máquina que se quiere editar.
+    :return del GET: El render del template editMachine.html
+    :return del POST: El render del template maquinas.html
+    """
     maquina = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
     if request.method == 'POST':
         machineForm = AddMachinesForm(request.POST, request.FILES, instance=maquina)
@@ -341,9 +392,17 @@ def editMachine(request, nombre_maquina_url):
     return render(request, 'accounts/editMachine.html',context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def deleteMachine(request, nombre_maquina_url):
-
+    """
+    Si el método es POST entonces borra la máquina en la base de datos, pero si
+    el método es GET, entonces sólo muestra el template deleteMachine.html
+    
+    :param request: Objeto Http.
+    :param nombre_maquina_url: Nombre de la máquina que se quiere borrar.
+    :return del GET: El render del template deleteMachine.html
+    :return del POST: El render del template maquinas.html
+    """
     maquina = Maquina.objects.get(nombre_maquina=nombre_maquina_url)
     if request.method == 'POST':
         maquina.delete()
@@ -353,17 +412,29 @@ def deleteMachine(request, nombre_maquina_url):
     return render(request, 'accounts/deleteMachine.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def categories(request):
+    """
+    Muestra una lista de las categorías que hay en el sistema.
     
+    :param request: Objeto Http.
+    :return: El render del template categories.html
+    """
     categories = Category.objects.all()
     context = {'categories':categories}
     return render(request, 'accounts/categories.html',context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def addCategories(request):
-        
+    """
+    Si el método es POST entonces añade la nueva categoría a la base de datos, pero si
+    el método es GET, entonces sólo muestra el template categories.html
+    
+    :param request: Objeto Http.
+    :return del GET: El render del template addCategories.html
+    :return del POST: El render del template categories.html
+    """    
     if request.method == 'POST':
         categoryForm = AddCategoriesForm(request.POST)
         if categoryForm.is_valid():
@@ -376,9 +447,17 @@ def addCategories(request):
     return render(request, 'accounts/addCategories.html',context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def editCategories(request, nombre_categoria_url):
-
+    """
+    Si el método es POST entonces edita la categoría en la base de datos, pero si
+    el método es GET, entonces sólo muestra el template editCategories.html
+    
+    :param request: Objeto Http.
+    :param nombre_maquina_url: Nombre de la categoróa que se quiere editar.
+    :return del GET: El render del template editCategories.html
+    :return del POST: El render del template categories.html
+    """
     categoria = Category.objects.get(nombre=nombre_categoria_url)
     if request.method == 'POST':
         categoryForm = AddCategoriesForm(request.POST, instance=categoria)
@@ -392,9 +471,17 @@ def editCategories(request, nombre_categoria_url):
     return render(request, 'accounts/editCategories.html',context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def deleteCategories(request, nombre_categoria_url):
+    """
+    Si el método es POST entonces elimina la categoría en la base de datos, pero si
+    el método es GET, entonces sólo muestra el template deleteCategories.html
     
+    :param request: Objeto Http.
+    :param nombre_maquina_url: Nombre de la categoróa que se quiere borrar.
+    :return del GET: El render del template deleteCategories.html
+    :return del POST: El render del template categories.html
+    """
     categoria = Category.objects.get(nombre=nombre_categoria_url)
     if request.method == 'POST':
         categoria.delete()
@@ -404,9 +491,17 @@ def deleteCategories(request, nombre_categoria_url):
     return render(request, 'accounts/deleteCategories.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def createAdminUser(request, id):
-
+    """
+    Si el método es POST entonces eleva de privilegios a un usuario, pero si
+    el método es GET, entonces sólo muestra el template createAdminUser.html
+    
+    :param request: Objeto Http.
+    :param id: Id del usuario que se quiere hacer administrador.
+    :return del GET: El render del template createAdminUser.html
+    :return del POST: El render del template userProfile.html
+    """
     machinesInside=0
     machinesCompleted=[]
     machinesCompletedList = []
@@ -439,9 +534,17 @@ def createAdminUser(request, id):
     return render(request, 'accounts/createAdminUser.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def deleteAdminUser(request, id):
+    """
+    Si el método es POST entonces eleva de quita privilegios a un usuario, pero si
+    el método es GET, entonces sólo muestra el template deleteAdminUser.html
     
+    :param request: Objeto Http.
+    :param id: Id del usuario que se quiere quitar permisos de administrador.
+    :return del GET: El render del template deleteAdminUser.html
+    :return del POST: El render del template userProfile.html
+    """
     machinesInside=0
     machinesCompleted=[]
     machinesCompletedList = []
@@ -473,9 +576,17 @@ def deleteAdminUser(request, id):
     return render(request, 'accounts/deleteAdminUser.html', context)
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+#@allowed_users(allowed_roles=['admin']))
 def deleteUser(request, id):
+    """
+    Si el método es POST entonces elimina a un usuario, pero si
+    el método es GET, entonces sólo muestra el template deleteUser.html
     
+    :param request: Objeto Http.
+    :param id: Id del usuario que se quiere eliminar.
+    :return del GET: El render del template deleteUser.html
+    :return del POST: El render del template ranking.html
+    """
     machinesInside=0
     machinesCompleted=[]
     machinesCompletedList = []
@@ -508,6 +619,13 @@ def deleteUser(request, id):
 @login_required(login_url='login')
 def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando le da el alumno a acceder a la maquina desde /machines/<nombreMaquina> creamos la relación muchos a muchos entre el usuario y la maquina
     #comprobar que no se puede acceder dos veces a la mierda esta
+    """
+    Crea una nueva fila en la base de datos del modelo Acceso, haciendo que el usuario haya accedido a la máquina. 
+
+    :param request: Objeto Http.
+    :param nombre_maquina_url: Nombre de la máquina que se quiere acceder.
+    :return: El render del template maquinas.html
+    """
     urlMachine = '/maquinas/'
     urlMachine += nombre_maquina_url
 
@@ -525,56 +643,63 @@ def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando 
 
 @login_required(login_url='login')
 def openvpn(request):
+    """
+    Se muestra la información relativa a la VPN.
+
+    :param request: Objeto Http.
+    :return: El render del template openvpn.html
+    """
     current_user = request.user
     alumnoBD = Alumno.objects.get(user=current_user)
     
     context = {}
     return render(request, 'accounts/openvpn.html',context)
 
-@login_required(login_url='login')
-def secureOpenVpnFiles(request,file):
-    # urlFileOpenVpn = 'openvpn/'
-    # urlFileOpenVpn += file
-    # current_user = request.user
-    # if Alumno.objects.filter(user=current_user, openvpnFile=urlFileOpenVpn).exists(): #comprobamos que el archivo que quiere descargar es el suyo propio
-    #     return HttpResponse(file, content_type='application/octet-stream')
-    # else:
-    #     return redirect('home')
-    return redirect('home')
-    urlFileOpenVpn = 'openvpn/'
-    urlFileOpenVpn += file
-    pathPc = '/home/jaime/Escritorio/TFG/media/openvpn/'
-    pathPc += file
-    current_user = request.user
-    if Alumno.objects.filter(user=current_user, openvpnFile=urlFileOpenVpn).exists(): #comprobamos que el archivo que quiere descargar es el suyo propio
-        fileRead = open(pathPc, 'rb')
-        return FileResponse(fileRead)
-    else:
-        return redirect('home')
 
 #@unauthenticathed_user
 def loginUsername(request):     #la pagina del login
+    """
+    Si el método es POST se comprueba si el usuario y contraseña es correcto, por el contrario se 
+    muestra el render del template login.html.
 
-	contexto={}
-	if request.method == 'POST':
-		username = request.POST.get('username')
-		password = request.POST.get('password')
+    :param request: Objeto Http.
+    :return: El render del template login.html
+    """
 
-		user = authenticate(request, username=username, password=password)
+    contexto={}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-		if user is not None:		#si se autentifica bien 
-			login(request, user)
-			return redirect('home')
-		else:
-			messages.warning(request, 'El Usuario o la Contraseña es incorrecta') #ESTO NO FUNCIONA ARREGLARLO
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:		#si se autentifica bien 
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.warning(request, 'El Usuario o la Contraseña es incorrecta') #ESTO NO FUNCIONA ARREGLARLO
             
-	return render(request, 'accounts/login.html',contexto)
+    return render(request, 'accounts/login.html',contexto)
 
 def logoutUser(request):	#cuando el usuario pulsa el boton de logout se le direcciona a la pagina /logout que llama al metodo logout para hacer el que? pues si, el logout
-	logout(request)
-	return redirect('login')
+    """
+    Se cierra la sesión del usuario.
+
+    :param request: Objeto Http.
+    :return: El render del template login.html
+    """
+    logout(request)
+    return redirect('login')
 
 def registrarse(request):
+    """
+    Si el método es POST se valida que los datos sean correctos, en tal caso se crea el usuario junto con su archivo de conexión openvpn, pero si 
+    el método es GET se muestra el template registrarse.html
+
+    :param request: Objeto Http.
+    :return del GET: El render del template registrarse.html
+    :return del POST: El render del template login.html
+    """
     contexto={}
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
