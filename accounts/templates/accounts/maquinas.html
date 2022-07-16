@@ -3,8 +3,6 @@
 
 {% block content %}
 
-    
-
     {% if lista_maquinas %}
     <div class="container-fluid p-4" id="rowTopOpenvpn">
         <img src="/static/images/1106631.png"  height=130px width=130px class="rounded-circle" id="openvpnPhotho"/>
@@ -16,8 +14,6 @@
         
     </div>
     <br> 
-        
-        
         <main role="main" class="container" >
 
             {% if messages %}
@@ -48,8 +44,7 @@
                                         <th>Fecha Creada</th>
                                         <th>Categorías</th>
                                         <th></th>
-                                        
-                                        
+
                                     </tr>
                                 </thread>
                                 <tbody>
@@ -67,24 +62,17 @@
                                                 </div>
                                                 </td>
                                                 <td>
-                                                
-                                                    
-                                                    {{i.dificultad}}
-                                                   
+                                                    {{i.dificultad}}                                                   
                                                 </td>
                                                 <td>
                                                     {{i.dia_creada|date}}
                                                 </td>
                                                 <td>
-                                                    
-
                                                     {% for ca in i.categoria.all %}
                                                         <span class="badge bg-secondary">{{ca.nombre}}</span>
                                                         {% if forloop.counter == 5 or forloop.counter == 9 or forloop.counter == 13%}
                                                             <br>
                                                         {% endif %}
-                                                        
-                                                    
                                                     {% endfor %}
                                                 </td>
 

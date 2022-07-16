@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Decorators &mdash; Plataforma para el aprendizaje de ciberseguridad  documentation</title>
+  <title>Decorators &mdash; Hacker Machines  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -26,7 +26,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Plataforma para el aprendizaje de ciberseguridad
+            <a href="../index.html" class="icon icon-home"> Hacker Machines
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -51,7 +51,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Plataforma para el aprendizaje de ciberseguridad</a>
+          <a href="../index.html">Hacker Machines</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -74,24 +74,15 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="accounts.decorators.allowed_users">
 <span class="sig-prename descclassname"><span class="pre">accounts.decorators.</span></span><span class="sig-name descname"><span class="pre">allowed_users</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allowed_roles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.decorators.allowed_users" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Este decorator es utilizado para controlar que funciones pueden ser ejecutadas por determinados grupos,
+en caso de que no se pertenezca al grupo en cuestión se le redirecciona a la pantalla home.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="accounts.decorators.unauthenticathed_user">
 <span class="sig-prename descclassname"><span class="pre">accounts.decorators.</span></span><span class="sig-name descname"><span class="pre">unauthenticathed_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view_func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.decorators.unauthenticathed_user" title="Permalink to this definition"></a></dt>
-<dd><p>This function is a decorator that takes in a view function as an argument and returns a new view
-function.</p>
-<p>The new view function will check if the user is authenticated. If the user is authenticated, 
-the user will be redirected to the home page. If the user is not authenticated, the view function
-will execute as normal</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>view_func</strong> – The view function that we are decorating</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A function</p>
-</dd>
-</dl>
+<dd><p>Esta funcion es un decorator que verifica si el usuario está autentificado, en caso de que no lo esté 
+se le redirecciona a la pantalla home.</p>
 </dd></dl>
 
 </div>

@@ -29,12 +29,8 @@
             <a href="{% url 'home' %}">
                 <img src="{% static 'images/logo_transparentEditNo.png' %}" style="height:70px;" >
             </a>
-            {% comment %} <img src="/static/images/logo_transparentEditNo.png" style="height:70px;" > {% endcomment %}
             <ul class="nav me-auto" style="margin-left: 20px; margin-top: revert;">
-                
-                
-                {% comment %} <li><a href="{% url 'home' %}" class="nav-link px-2 text-white"><i class="bi bi-house"></i> Home</a></li> {% endcomment %}
-                
+
                 <li><a href="{% url 'maquinas' %}" class="nav-link px-2 text-white"><i class="bi bi-box"></i> Maquinas</a></li>
                 {% if request.user.is_staff%}
                     <li><a href="{% url 'categories' %}" class="nav-link px-2 text-white"><i class="bi bi-book"></i> Categorías</a></li>
@@ -67,36 +63,11 @@
         </div>
       </nav>
 
+        {% block content %}
+        
+        
+        {% endblock %}
 
-	{% comment %} Esto es para los mensajes que salen de warnings {% endcomment %}
-
-	{% comment %} <main role="main" class="container">
-		<div class="row">
-			<div class="col"> {% endcomment %}
-				{% comment %} {% if messages %}
-				{% for message in messages %}
-					<div class="alert alert-{{ message.tags }}">
-					{{ message }}
-					</div>
-				{% endfor %}
-				{% endif %} {% endcomment %}
-				{% block content %}
-				
-				
-				{% endblock %}
-		  	{% comment %} </div>
-		  
-		</div>
-	</main> {% endcomment %}
-	
-    {% comment %} <main role="main" class="container">
-		<div class="row">
-			<div class="col">
-
-            </div>
-		  
-		</div>
-	</main> {% endcomment %}
 	
 </body>
 

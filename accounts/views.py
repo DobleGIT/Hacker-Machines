@@ -12,14 +12,14 @@ from django.db.models.functions import Now
 
 # Create your views here.
 from .models import *
-from .decorators import allowed_users #allowed_users es usado para controlar los grupos y permisos para acceder a determinadas paginas
+from .decorators import allowed_users                   #allowed_users es usado para controlar los grupos y permisos para acceder a determinadas paginas
 from django.core.paginator import Paginator
 import docker, datetime, os
 from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm, AddCategoriesForm, AddMachinesForm
-from .decorators import unauthenticathed_user #decorador creado para que si estas loggeado no puedas entrar a la pagina
-from .filters import UserFilter                 #filtro para buscar por usuarios
+from .decorators import unauthenticathed_user           #decorador creado para que si estas loggeado no puedas entrar a la pagina
+from .filters import UserFilter                         #filtro para buscar por usuarios
 
-import random #random y string lo usamos para generar las urls aleatorias al crear el archivo ovpn
+import random
 import string
 
 
@@ -36,7 +36,7 @@ def home(request):
 
 
 @login_required(login_url='login') #comprobamos que esté loggeado y si no es así se le manda al /login
-def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ90L5jfldw&ab_channel=CoreySchafer
+def profile(request):				
 
     """
     Esta funcion se utiliza para editar el perfil, se crean dos formularios uno para
@@ -50,7 +50,7 @@ def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ
     """
 	
 	# lo que hacemos aqui es crear dos forms que saquen solo el email y la foto de perfil en caso de que no sea POST y en caso de que lo sea see guardan los forms
-    if request.method == 'POST': #creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
+    if request.method == 'POST': 
         alumno_form = AlumnoUpdateForm(request.POST, request.FILES, instance = request.user.alumno)
         user_form = UserUpdateForm(request.POST, instance=request.user)
         
@@ -60,7 +60,7 @@ def profile(request):				#esta sacado de aqui https://www.youtube.com/watch?v=CQ
             messages.success(request, f'Se ha actualizado tu perfil')
             return redirect('profile')
     else:
-        alumno_form = AlumnoUpdateForm(instance = request.user.alumno)		#creamos dos forms distintos porque uno es para la tabla Alumno y otra para la tabla User
+        alumno_form = AlumnoUpdateForm(instance = request.user.alumno)		
         user_form = UserUpdateForm(instance = request.user)
     
     context={'alumno_form':alumno_form, 'user_form':user_form}
@@ -92,8 +92,6 @@ def userProfile(request, id):
             maquinaIndividual = Maquina.objects.get(pk=machine.maquinaA.pk)
             machinesCompletedList.append(maquinaIndividual)
 
-        
-    
     rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
     context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompleted}
     
@@ -112,15 +110,12 @@ def ranking(request):
     listaUsuarios = User.objects.all()
     listaUsuariosOrdenada = listaUsuarios.order_by('-alumno__points')
     myFilter = UserFilter(request.GET, queryset=listaUsuariosOrdenada)
-    
-    listaUsuariosOrdenadaFiltrada = myFilter.qs
-    print(listaUsuariosOrdenadaFiltrada)
+    listaUsuariosOrdenadaFiltrada = myFilter.qs  
 
     if listaUsuariosOrdenadaFiltrada.count() == 1: #en caso de que se haya filtrado y solo haya un usuario se recorre la lista para calcular cual es su posicion
         for iterator in listaUsuariosOrdenada:
             count+=1
-            if iterator.username == listaUsuariosOrdenadaFiltrada[0].username:
-                print(count)
+            if iterator.username == listaUsuariosOrdenadaFiltrada[0].username:               
                 iterator.alumno.position = count
                 page_objO.append(iterator)
                 break
@@ -134,10 +129,6 @@ def ranking(request):
     paginator = Paginator(page_objO, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
-        
-    # print(listaUsuariosOrdenada)
-    #lista_alumnos_ordenada = lista_alumnos.order_by('-puntos')
     context = {"listaUsuariosOrdenada":listaUsuariosOrdenada,'page_obj': page_obj, 'paginator':paginator, 'myFilter':myFilter}
     return render(request, 'accounts/ranking.html',context)
 
@@ -164,13 +155,8 @@ def maquinas(request, nombre_maquina_url=None):
     individualCompleted= False
     acceso = []
 
-    # actualDate = timezone.now()
-    # print(actualDate)
-
     if nombre_maquina_url != None: #si se le pasa como argumento el nombre de la maquina
         
-        #print(timezone.now())
-        # print(datetime.datetime.now())
         maquina_individual = Maquina.objects.get(nombre_maquina=nombre_maquina_url) 	#esto quiere decir que a la url se le pasa la clave primaria de la maquina
         
         #seleccionamos los datos globales de la maquina
@@ -180,8 +166,6 @@ def maquinas(request, nombre_maquina_url=None):
         
         if Acceso.objects.filter(alumnoA=current_user, maquinaA=maquina_individual).exists(): #esto lo hacemos para evitar errores
             acceso = Acceso.objects.get(alumnoA=current_user, maquinaA=maquina_individual)
-            # print(acceso.accesed_date)
-            # print(timezone.now())
         else:
             pass
         if request.method == 'POST':        
@@ -191,10 +175,6 @@ def maquinas(request, nombre_maquina_url=None):
             urlMachine += nombre_maquina_url
 
             if request.POST.get('restart') != None and maquina_individual.activa: #si se ha pulsado el botón de reinciar
-                #eso hacerlo asi si se ejecuta en mi pc
-                #comandReset = 'vboxmanage controlvm' + ' ' + nombre_maquina_url + ' ' + 'reset'
-                #os.system(comandReset)
-
                 #esto ejecutarlo asi si está en la maquina virtual
                 actualTime = timezone.now()
                 if maquina_individual.reboot != None:
@@ -202,7 +182,7 @@ def maquinas(request, nombre_maquina_url=None):
                     rest = str(rest)
                     rest = rest.split(':')
                     
-                    if int(rest[1]) <5: #300 segundos tienen que pasar para volver a reiniciar la maquina
+                    if int(rest[1]) <5: #5 minutos tienen que pasar para volver a reiniciar la maquina
                         messages.success(request, 'El ya se está reiniciando, por favor espera a que se despliegue la máquina')
                     else:
                         maquina_individual.reboot = actualTime
@@ -218,7 +198,6 @@ def maquinas(request, nombre_maquina_url=None):
                     messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen la máquina')
             
             elif flagUserInput == maquina_individual.user_flag and maquina_individual.activa:
-                #modificar el valor user_flag de la tabla acceso
                 
                 if acceso.user_flag == True:
                     messages.warning(request, 'Ya conseguiste esta flag')
@@ -230,31 +209,31 @@ def maquinas(request, nombre_maquina_url=None):
                     if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True: #comprobamos si al meter la flag ha completado ya la maquina
                         acceso.completed = True
                         actualDate = timezone.now()
-                        #print(actualDate)
                         acceso.finish_date = actualDate
 
                         #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos
                         rest = actualDate - acceso.accesed_date
-                        #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos,
-                        #se hacen todas estas conversiones para que no dan error con el split
                         rest = actualDate - acceso.accesed_date
-                        print(rest)
                         rest = str(rest)
+                        restSalida = rest
                         rest = rest.split(':')
-                        rest[2] = float(rest[2])
-                        rest[2]= f'{rest[2]:.0f}'
-                        if int(rest[0]) >= 1:
-                            acceso.days_to_finish = int(rest[0])
+                        days = rest[0].split()
+                        
+                        try:
+                            if int(days[2]) >= 1:
+                                acceso.hours_to_finish = int(days[2])
+                            if int(days[0]) >= 1:
+                                acceso.days_to_finish = int(days[0])
+                        except:                            
+                            if int(rest[0]) >= 1:
+                                acceso.hours_to_finish = int(rest[0])
                         if int(rest[1]) >= 1:
-                            acceso.hours_to_finish = int(rest[1])
-                        if int(rest[2]) >= 1:
-                            acceso.minutes_to_finish = int(rest[2])
+                            acceso.minutes_to_finish = int(rest[1])
                         acceso.save()
                         alumnoBD.points += 50
                         alumnoBD.save()
+                        
                         messages.success(request, '¡Enhorabuena, has completado el reto +100 puntos!')
-                        
-                        
                     else:
                         messages.success(request, '¡Genial has acertado, +50 puntos!')
         
@@ -271,27 +250,31 @@ def maquinas(request, nombre_maquina_url=None):
                     if acceso.completed == False and acceso.user_flag == True and acceso.root_flag == True:
                         acceso.completed = True
                         actualDate = timezone.now()
-                        
                         acceso.finish_date = actualDate
-                        
-                        #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos,
+
+                        #calculamos el tiempo en dias horas y minutos para guardarlo en la base de datos
+                        rest = actualDate - acceso.accesed_date
                         #se hacen todas estas conversiones para que no dan error con el split
                         rest = actualDate - acceso.accesed_date
-                        print(rest)
                         rest = str(rest)
+                        restSalida = rest
                         rest = rest.split(':')
-                        rest[2] = float(rest[2])
-                        rest[2]= f'{rest[2]:.0f}'
-                        if int(rest[0]) >= 1:
-                            acceso.days_to_finish = int(rest[0])
+                        days = rest[0].split()
+                        
+                        try:
+                            if int(days[2]) >= 1:
+                                acceso.hours_to_finish = int(days[2])
+                            if int(days[0]) >= 1:
+                                acceso.days_to_finish = int(days[0])
+                        except:                            
+                            if int(rest[0]) >= 1:
+                                acceso.hours_to_finish = int(rest[0])
                         if int(rest[1]) >= 1:
-                            acceso.hours_to_finish = int(rest[1])
-                        if int(rest[2]) >= 1:
-                            acceso.minutes_to_finish = int(rest[2])
-
+                            acceso.minutes_to_finish = int(rest[1])
                         acceso.save()
                         alumnoBD.points += 50
                         alumnoBD.save()
+                        
                         messages.success(request, '¡Enhorabuena, has completado el reto +100 puntos!')
                         
                     else:
@@ -309,17 +292,15 @@ def maquinas(request, nombre_maquina_url=None):
         else:
             pass
         
-
-        
         context = {'lista_maquinas':lista_vacia, 'maquina_individual':maquina_individual, 'usersInside':usersInside, 'usersUserFlag':usersUserFlag, 'usersRootFlag':usersRootFlag, 'individualUserFlag':individualUserFlag, 'individualRootFlag':individualRootFlag, 'individualCompleted':individualCompleted, 'acceso':acceso}
         render(request, 'accounts/maquinas.html',context)
 
     else: #si no se le pasa ninguna maquina se muestran todas las maquinas
-        context = {'lista_maquinas':maquinas} 						#este es el diccionario que le pasamos a la url 
+        context = {'lista_maquinas':maquinas} 						
     return render(request, 'accounts/maquinas.html',context)
 
 @login_required(login_url='/login/')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def visibleMachine(request, nombre_maquina_url):
     """
     Si la máquina está activa, esta será desactivada, sino será activada.
@@ -343,7 +324,7 @@ def visibleMachine(request, nombre_maquina_url):
         return redirect('maquinas')
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def addMachine(request):
     """
     Si el método es POST entonces se comprueba y se añade la nueva máquina en la base de datos.
@@ -368,7 +349,7 @@ def addMachine(request):
     return render(request, 'accounts/addMachine.html',context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def editMachine(request, nombre_maquina_url):
     """
     Si el método es POST entonces se comprueba y se edita la máquina en la base de datos, pero si
@@ -392,7 +373,7 @@ def editMachine(request, nombre_maquina_url):
     return render(request, 'accounts/editMachine.html',context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def deleteMachine(request, nombre_maquina_url):
     """
     Si el método es POST entonces borra la máquina en la base de datos, pero si
@@ -412,7 +393,7 @@ def deleteMachine(request, nombre_maquina_url):
     return render(request, 'accounts/deleteMachine.html', context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def categories(request):
     """
     Muestra una lista de las categorías que hay en el sistema.
@@ -425,7 +406,7 @@ def categories(request):
     return render(request, 'accounts/categories.html',context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def addCategories(request):
     """
     Si el método es POST entonces añade la nueva categoría a la base de datos, pero si
@@ -447,7 +428,7 @@ def addCategories(request):
     return render(request, 'accounts/addCategories.html',context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def editCategories(request, nombre_categoria_url):
     """
     Si el método es POST entonces edita la categoría en la base de datos, pero si
@@ -471,7 +452,7 @@ def editCategories(request, nombre_categoria_url):
     return render(request, 'accounts/editCategories.html',context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def deleteCategories(request, nombre_categoria_url):
     """
     Si el método es POST entonces elimina la categoría en la base de datos, pero si
@@ -491,7 +472,7 @@ def deleteCategories(request, nombre_categoria_url):
     return render(request, 'accounts/deleteCategories.html', context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def createAdminUser(request, id):
     """
     Si el método es POST entonces eleva de privilegios a un usuario, pero si
@@ -534,7 +515,7 @@ def createAdminUser(request, id):
     return render(request, 'accounts/createAdminUser.html', context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def deleteAdminUser(request, id):
     """
     Si el método es POST entonces eleva de quita privilegios a un usuario, pero si
@@ -565,7 +546,7 @@ def deleteAdminUser(request, id):
     rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
     context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompleted}
     if request.method == 'POST':
-        group = Group.objects.get(name='admin') #lo añadimos al grupo de admin
+        group = Group.objects.get(name='admin') #lo quitamos del grupo de admin
         user.groups.remove(group)
         user.is_staff=False
         user.save()
@@ -576,7 +557,7 @@ def deleteAdminUser(request, id):
     return render(request, 'accounts/deleteAdminUser.html', context)
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['admin']))
+@allowed_users(allowed_roles=['admin'])
 def deleteUser(request, id):
     """
     Si el método es POST entonces elimina a un usuario, pero si
@@ -604,8 +585,6 @@ def deleteUser(request, id):
             maquinaIndividual = Maquina.objects.get(pk=machine.maquinaA.pk)
             machinesCompletedList.append(maquinaIndividual)
 
-        
-    
     rootFlags = Acceso.objects.filter(alumnoA=user, root_flag=True).count()
     context = {'user':user, 'countMachinesInside':countMachinesInside, 'countCompletedRooms':countCompletedRooms, 'points':alumno.points , 'machinesCompleted':machinesCompleted}
     if request.method == 'POST':
@@ -618,7 +597,6 @@ def deleteUser(request, id):
 
 @login_required(login_url='login')
 def access_to_machine(request, nombre_maquina_url): #a esta url se llega cuando le da el alumno a acceder a la maquina desde /machines/<nombreMaquina> creamos la relación muchos a muchos entre el usuario y la maquina
-    #comprobar que no se puede acceder dos veces a la mierda esta
     """
     Crea una nueva fila en la base de datos del modelo Acceso, haciendo que el usuario haya accedido a la máquina. 
 
@@ -656,7 +634,6 @@ def openvpn(request):
     return render(request, 'accounts/openvpn.html',context)
 
 
-#@unauthenticathed_user
 def loginUsername(request):     #la pagina del login
     """
     Si el método es POST se comprueba si el usuario y contraseña es correcto, por el contrario se 
@@ -677,11 +654,11 @@ def loginUsername(request):     #la pagina del login
             login(request, user)
             return redirect('home')
         else:
-            messages.warning(request, 'El Usuario o la Contraseña es incorrecta') #ESTO NO FUNCIONA ARREGLARLO
+            messages.warning(request, 'El Usuario o la Contraseña es incorrecta') 
             
     return render(request, 'accounts/login.html',contexto)
 
-def logoutUser(request):	#cuando el usuario pulsa el boton de logout se le direcciona a la pagina /logout que llama al metodo logout para hacer el que? pues si, el logout
+def logoutUser(request):	#cuando el usuario pulsa el boton de logout
     """
     Se cierra la sesión del usuario.
 
@@ -709,10 +686,6 @@ def registrarse(request):
 
             group = Group.objects.get(name='alumno') #añadimos al alumno al grupo alumno
             newAlumno.groups.add(group)
-            # if request.user.is_staff
-            # messages.success(request, f'Usuario {username} creado')
-            #Generamos el archivo openvpn para el alumno
-            #comando equivalente a docker run -v hacker-machines-openvpn:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full username nopass
             client = docker.from_env()
             volumenes = ['hacker-machines-openvpn:/etc/openvpn']
             commandoGenerar =['easyrsa', 'build-client-full', username, 'nopass']
@@ -724,8 +697,7 @@ def registrarse(request):
             comandoObtener = ['ovpn_getclient', username]
             cosa = client.containers.run(image=imagen,command=comandoObtener,volumes=volumenes,auto_remove=True)
             
-            #generamos una url random para que no se pueda acceder a ella desde el navegador
-            
+            #generamos una url random para que no se pueda acceder a ella desde el navegador    
             characters = string.ascii_letters + string.digits
             urlRandom = ''.join(random.choice(characters) for i in range(50))
             

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Models &mdash; Plataforma para el aprendizaje de ciberseguridad  documentation</title>
+  <title>Models &mdash; Hacker Machines  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Plataforma para el aprendizaje de ciberseguridad
+            <a href="../index.html" class="icon icon-home"> Hacker Machines
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Plataforma para el aprendizaje de ciberseguridad</a>
+          <a href="../index.html">Hacker Machines</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -74,8 +74,10 @@
 <span id="models"></span><h1>Models<a class="headerlink" href="#module-accounts.models" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="accounts.models.Acceso">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Acceso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alumnoA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maquinaA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accesed_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days_to_finish</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hours_to_finish</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minutes_to_finish</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">completed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Acceso" title="Permalink to this definition"></a></dt>
-<dd><dl class="py exception">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Acceso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Acceso" title="Permalink to this definition"></a></dt>
+<dd><p>Este modelo se utiliza para mantener una relación entre User y Máquinas, añadiendose una nueva entrada cada vez que un 
+Usuario accede a una nueva Máquina y creando la información relativa a la resolución del reto.</p>
+<dl class="py exception">
 <dt class="sig sig-object py" id="accounts.models.Acceso.DoesNotExist">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#accounts.models.Acceso.DoesNotExist" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -88,21 +90,13 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.accesed_date">
 <span class="sig-name descname"><span class="pre">accesed_date</span></span><a class="headerlink" href="#accounts.models.Acceso.accesed_date" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Guarda la fecha en la que accedió a la máquina</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.alumnoA">
 <span class="sig-name descname"><span class="pre">alumnoA</span></span><a class="headerlink" href="#accounts.models.Acceso.alumnoA" title="Permalink to this definition"></a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+<dd><p>Relación con la tabla User</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -113,59 +107,36 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.completed">
 <span class="sig-name descname"><span class="pre">completed</span></span><a class="headerlink" href="#accounts.models.Acceso.completed" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Booleano que indica si ha completado la máquina</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.days_to_finish">
 <span class="sig-name descname"><span class="pre">days_to_finish</span></span><a class="headerlink" href="#accounts.models.Acceso.days_to_finish" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Días que ha tardado en resolver la máquina</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.finish_date">
 <span class="sig-name descname"><span class="pre">finish_date</span></span><a class="headerlink" href="#accounts.models.Acceso.finish_date" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Guarda la fecha en la que resolvió a la máquina</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="accounts.models.Acceso.get_next_by_accesed_date">
-<span class="sig-name descname"><span class="pre">get_next_by_accesed_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">accesed_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Acceso.get_next_by_accesed_date" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="accounts.models.Acceso.get_previous_by_accesed_date">
-<span class="sig-name descname"><span class="pre">get_previous_by_accesed_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">accesed_date&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Acceso.get_previous_by_accesed_date" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.hours_to_finish">
 <span class="sig-name descname"><span class="pre">hours_to_finish</span></span><a class="headerlink" href="#accounts.models.Acceso.hours_to_finish" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Horas que ha tardado en resolver la máquina</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Acceso.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#accounts.models.Acceso.id" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.maquinaA">
 <span class="sig-name descname"><span class="pre">maquinaA</span></span><a class="headerlink" href="#accounts.models.Acceso.maquinaA" title="Permalink to this definition"></a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+<dd><p>Relación con la tabla Maquina</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -176,35 +147,30 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.minutes_to_finish">
 <span class="sig-name descname"><span class="pre">minutes_to_finish</span></span><a class="headerlink" href="#accounts.models.Acceso.minutes_to_finish" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Minutos que ha tardado en resolver la máquina</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Acceso.objects">
-<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#accounts.models.Acceso.objects" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.root_flag">
 <span class="sig-name descname"><span class="pre">root_flag</span></span><a class="headerlink" href="#accounts.models.Acceso.root_flag" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Booleano que indica si ha resuleto la Root Flag</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Acceso.user_flag">
 <span class="sig-name descname"><span class="pre">user_flag</span></span><a class="headerlink" href="#accounts.models.Acceso.user_flag" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Booleano que indica si ha resuleto la User Flag</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="accounts.models.Alumno">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Alumno</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maquinas_completadas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">openvpnFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Alumno" title="Permalink to this definition"></a></dt>
-<dd><dl class="py exception">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Alumno</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Alumno" title="Permalink to this definition"></a></dt>
+<dd><p>Modelo que guarda información extra sobre los usuarios, como el número de máquinas completadas, los puntos, la imagen de perfil y el archivo openvpn.</p>
+<dl class="py exception">
 <dt class="sig sig-object py" id="accounts.models.Alumno.DoesNotExist">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#accounts.models.Alumno.DoesNotExist" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -217,77 +183,41 @@ object the first time, the query is executed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="accounts.models.Alumno.accesed_machines">
 <span class="sig-name descname"><span class="pre">accesed_machines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Alumno.accesed_machines" title="Permalink to this definition"></a></dt>
-<dd><p>It returns the machines that the user has accessed
-:return: A QuerySet of the machines that the user has accessed.</p>
+<dd><p>Retorna las máquinas a las que ha accedido el Alumno.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Alumno.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#accounts.models.Alumno.id" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Alumno.maquinas_completadas">
 <span class="sig-name descname"><span class="pre">maquinas_completadas</span></span><a class="headerlink" href="#accounts.models.Alumno.maquinas_completadas" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Número de máquinas completadas</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Alumno.objects">
-<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#accounts.models.Alumno.objects" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Alumno.openvpnFile">
 <span class="sig-name descname"><span class="pre">openvpnFile</span></span><a class="headerlink" href="#accounts.models.Alumno.openvpnFile" title="Permalink to this definition"></a></dt>
-<dd><p>The descriptor for the file attribute on the model instance. Return a
-FieldFile when accessed so you can write code like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">myapp.models</span> <span class="k">import</span> <span class="n">MyModel</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">MyModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">size</span>
-</pre></div>
-</div>
-<p>Assign a file object on assignment so you can do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/path/to/hello.world&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">instance</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-</pre></div>
-</div>
+<dd><p>Se guarda la dirección en donde está el archivo .ovpn de conexión</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Alumno.points">
 <span class="sig-name descname"><span class="pre">points</span></span><a class="headerlink" href="#accounts.models.Alumno.points" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Alumno.position">
-<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#accounts.models.Alumno.position" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Número total de puntos conseguidos</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Alumno.profile_image">
 <span class="sig-name descname"><span class="pre">profile_image</span></span><a class="headerlink" href="#accounts.models.Alumno.profile_image" title="Permalink to this definition"></a></dt>
-<dd><p>Just like the FileDescriptor, but for ImageFields. The only difference is
-assigning the width/height to the width_field/height_field, if appropriate.</p>
+<dd><p>Imagen de perfil</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Alumno.user">
 <span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#accounts.models.Alumno.user" title="Permalink to this definition"></a></dt>
-<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+<dd><p>Relación entre la tabla Alumno y User</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -299,8 +229,9 @@ assigning the width/height to the width_field/height_field, if appropriate.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="accounts.models.Category">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dia_creada</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Category" title="Permalink to this definition"></a></dt>
-<dd><dl class="py exception">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Category</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Category" title="Permalink to this definition"></a></dt>
+<dd><p>Este modelo se utiliza para guardar información sobre las categorías.</p>
+<dl class="py exception">
 <dt class="sig sig-object py" id="accounts.models.Category.DoesNotExist">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#accounts.models.Category.DoesNotExist" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -313,51 +244,28 @@ assigning the width/height to the width_field/height_field, if appropriate.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Category.dia_creada">
 <span class="sig-name descname"><span class="pre">dia_creada</span></span><a class="headerlink" href="#accounts.models.Category.dia_creada" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Fecha en la que se creó la categoría</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Category.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#accounts.models.Category.id" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Category.maquina_set">
-<span class="sig-name descname"><span class="pre">maquina_set</span></span><a class="headerlink" href="#accounts.models.Category.maquina_set" title="Permalink to this definition"></a></dt>
-<dd><p>Accessor to the related objects manager on the forward and reverse sides of
-a many-to-many relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
-instances.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
+
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Category.nombre">
 <span class="sig-name descname"><span class="pre">nombre</span></span><a class="headerlink" href="#accounts.models.Category.nombre" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Nombre de la categoría</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Category.objects">
-<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#accounts.models.Category.objects" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="accounts.models.Maquina">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Maquina</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nombre_maquina</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dificultad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descripcion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dia_creada</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reboot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Maquina" title="Permalink to this definition"></a></dt>
-<dd><dl class="py attribute">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">accounts.models.</span></span><span class="sig-name descname"><span class="pre">Maquina</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Maquina" title="Permalink to this definition"></a></dt>
+<dd><p>Modelo que guarda información sobre las Máquinas que hay en el sistema.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.DIFICULTAD">
 <span class="sig-name descname"><span class="pre">DIFICULTAD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[('Fácil',</span> <span class="pre">'Fácil'),</span> <span class="pre">('Media',</span> <span class="pre">'Media'),</span> <span class="pre">('Difícil',</span> <span class="pre">'Difífil'),</span> <span class="pre">('Insana',</span> <span class="pre">'Insana')]</span></em><a class="headerlink" href="#accounts.models.Maquina.DIFICULTAD" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -372,132 +280,84 @@ object the first time, the query is executed.</p>
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#accounts.models.Maquina.MultipleObjectsReturned" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Maquina.acceso_set">
-<span class="sig-name descname"><span class="pre">acceso_set</span></span><a class="headerlink" href="#accounts.models.Maquina.acceso_set" title="Permalink to this definition"></a></dt>
-<dd><p>Accessor to the related objects manager on the reverse side of a
-many-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.activa">
 <span class="sig-name descname"><span class="pre">activa</span></span><a class="headerlink" href="#accounts.models.Maquina.activa" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Se utiliza para saber si la Máquina es visible o no en la plataforma</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.categoria">
 <span class="sig-name descname"><span class="pre">categoria</span></span><a class="headerlink" href="#accounts.models.Maquina.categoria" title="Permalink to this definition"></a></dt>
-<dd><p>Accessor to the related objects manager on the forward and reverse sides of
-a many-to-many relation.</p>
-<p>In the example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
-instances.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+<dd><p>Relación ManyToMany entre Máquina y Categoría</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.descripcion">
 <span class="sig-name descname"><span class="pre">descripcion</span></span><a class="headerlink" href="#accounts.models.Maquina.descripcion" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Descripción de la Máquina</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.dia_creada">
 <span class="sig-name descname"><span class="pre">dia_creada</span></span><a class="headerlink" href="#accounts.models.Maquina.dia_creada" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Fecha en la que se ha creado</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.dificultad">
 <span class="sig-name descname"><span class="pre">dificultad</span></span><a class="headerlink" href="#accounts.models.Maquina.dificultad" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Dificultad que se le asigna a la Máquina pudiendo ser, Facil, Media, Difícil o Insana</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="accounts.models.Maquina.get_dificultad_display">
-<span class="sig-name descname"><span class="pre">get_dificultad_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.CharField:</span> <span class="pre">dificultad&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Maquina.get_dificultad_display" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Maquina.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#accounts.models.Maquina.id" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
+
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.image_machine">
 <span class="sig-name descname"><span class="pre">image_machine</span></span><a class="headerlink" href="#accounts.models.Maquina.image_machine" title="Permalink to this definition"></a></dt>
-<dd><p>Just like the FileDescriptor, but for ImageFields. The only difference is
-assigning the width/height to the width_field/height_field, if appropriate.</p>
+<dd><p>Imagen de la Máquina</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.ip">
 <span class="sig-name descname"><span class="pre">ip</span></span><a class="headerlink" href="#accounts.models.Maquina.ip" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>IP que se le asigna a la Máquina</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.nombre_maquina">
 <span class="sig-name descname"><span class="pre">nombre_maquina</span></span><a class="headerlink" href="#accounts.models.Maquina.nombre_maquina" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Nombre de la Máquina</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="accounts.models.Maquina.objects">
-<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#accounts.models.Maquina.objects" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.reboot">
 <span class="sig-name descname"><span class="pre">reboot</span></span><a class="headerlink" href="#accounts.models.Maquina.reboot" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Se guarda la fecha del último reinicio, para evitar que varios usuarios se reinicien la máquina a la vez</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.root_flag">
 <span class="sig-name descname"><span class="pre">root_flag</span></span><a class="headerlink" href="#accounts.models.Maquina.root_flag" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Root Flag del reto</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="accounts.models.Maquina.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#accounts.models.Maquina.save" title="Permalink to this definition"></a></dt>
-<dd><p>Save the current instance. Override this in a subclass if you want to
-control the saving process.</p>
-<p>The ‘force_insert’ and ‘force_update’ parameters can be used to insist
-that the “save” must be an SQL insert or update (or equivalent for
-non-SQL backends), respectively. Normally, they should not be set.</p>
+<dd><p>Comprueba si la imagen de la máquina tiene un ancho y alto mayor de 300, si es así la redimensiona a 300x300 y la guarda.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="accounts.models.Maquina.user_flag">
 <span class="sig-name descname"><span class="pre">user_flag</span></span><a class="headerlink" href="#accounts.models.Maquina.user_flag" title="Permalink to this definition"></a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>User Flag del reto</p>
 </dd></dl>
 
 </dd></dl>

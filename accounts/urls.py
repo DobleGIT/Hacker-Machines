@@ -53,6 +53,10 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password_reset_done.html"), 
         name="password_reset_complete"),
 
+    # path('password_reset/', auth_views.PasswordResetView.as_view(
+    #     html_email_template_name='registration/password_reset_html_email.html'
+    #     )),
+
     path('admin/doc/', include('django.contrib.admindocs.urls')),
 
     

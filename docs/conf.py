@@ -19,7 +19,7 @@ django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = 'Plataforma para el aprendizaje de ciberseguridad'
+project = 'Hacker Machines'
 copyright = '2022, Jaime Gómez García'
 author = 'Jaime Gómez García'
 

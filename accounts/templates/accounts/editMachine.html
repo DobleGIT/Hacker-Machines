@@ -33,7 +33,6 @@
                 <form method="POST" action="" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{machineForm | crispy}}
-                    <!-- Save changes button-->
                     <button class="btn btn-success" type="submit">Guardar Cambios</button>
                 </form>
 

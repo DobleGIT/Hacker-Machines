@@ -18,15 +18,7 @@
                     <div class="card-header">Foto de Perfil</div>
                     
                     <div class="card-body text-center">
-                        {% comment %} {% if request.user.alumno.profile_image.url != NULL %} {% endcomment %}
-
                         <img class="rounded-circle account-img" width="150px" src="{{request.user.alumno.profile_image.url}}" style="object-fit: cover;">
-                        
-                        {% comment %} {% else %}
-    
-                            <img class="rounded-circle account-img" width="150px" src="foto_perfil.png">
-                        
-                        {% endif %}   {% endcomment %}
                         
                         <h5 class="card-title"> {{request.user.username}}</h5>
                         
@@ -47,9 +39,7 @@
                         <form method="POST" action="" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{alumno_form | crispy}}
-                            {{user_form | crispy}}
-                
-                            <!-- Save changes button-->
+                            {{user_form | crispy}}                
                             <button class="btn btn-success" type="submit">Guardar Cambios</button>
                             <br><br>
                             

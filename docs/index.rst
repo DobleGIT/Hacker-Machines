@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Plataforma para el aprendizaje de ciberseguridad's documentation!
+Bienvenido a la documentación de Hacker Machines.
 ============================================================================
 
 .. toctree::
@@ -16,7 +16,7 @@ Welcome to Plataforma para el aprendizaje de ciberseguridad's documentation!
    modules/signals.rst
    modules/decorators.rst
 
-Indices and tables
+Indices y tablas
 ==================
 
 * :ref:`genindex`

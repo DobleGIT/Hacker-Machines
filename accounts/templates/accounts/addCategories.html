@@ -34,7 +34,6 @@
                 <form method="POST" action="" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{categoryForm | crispy}}     
-                    <!-- Save changes button-->
                     <button class="btn btn-success" type="submit">Añadir Categoría</button>
                 </form>
 
