@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    #'accounts.apps.AccountsConfig',
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django_filters',               #añadimos el django_filters para el filtrado de datos
     'django.contrib.admindocs',
     
-    'accounts',
+    #'accounts',
 
     
 
@@ -160,4 +160,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'hackermachinestfg@gmail.com' #hackermachinestfg@gmail.com
-EMAIL_HOST_PASSWORD = 'tjyxeggkhuxojngl'
+EMAIL_HOST_PASSWORD = ''

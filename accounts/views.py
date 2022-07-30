@@ -18,7 +18,7 @@ import docker, datetime, os
 from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm, AddCategoriesForm, AddMachinesForm
 from .decorators import unauthenticathed_user           #decorador creado para que si estas loggeado no puedas entrar a la pagina
 from .filters import UserFilter                         #filtro para buscar por usuarios
-
+import time
 import random
 import string
 
@@ -182,18 +182,18 @@ def maquinas(request, nombre_maquina_url=None):
                     rest = str(rest)
                     rest = rest.split(':')
                     
-                    if int(rest[1]) <5: #5 minutos tienen que pasar para volver a reiniciar la maquina
-                        messages.success(request, 'El ya se está reiniciando, por favor espera a que se despliegue la máquina')
+                    if int(rest[1]) <1: #5 minutos tienen que pasar para volver a reiniciar la maquina
+                        messages.success(request, 'El reto ya se está reiniciando, por favor espera a que se despliegue la máquina')
                     else:
                         maquina_individual.reboot = actualTime
                         maquina_individual.save()
-                        comandReset = "ssh jaime@192.168.1.136 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
+                        comandReset = "ssh jaime@192.168.43.192 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
                         os.system(comandReset)
                         messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen la máquina')
                 else:
                     maquina_individual.reboot = actualTime
                     maquina_individual.save()
-                    comandReset = "ssh jaime@192.168.1.136 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
+                    comandReset = "ssh jaime@192.168.43.192 'vboxmanage controlvm" + ' ' + nombre_maquina_url + ' ' + "reset'"
                     os.system(comandReset)
                     messages.success(request, 'El reto se está reiniciando, espera unos minutos a que se desplieguen la máquina')
             
@@ -681,6 +681,7 @@ def registrarse(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
+            
             newAlumno=form.save()
             username = form.cleaned_data.get('username')
 
@@ -690,7 +691,7 @@ def registrarse(request):
             volumenes = ['hacker-machines-openvpn:/etc/openvpn']
             commandoGenerar =['easyrsa', 'build-client-full', username, 'nopass']
             imagen = 'kylemanna/openvpn'
-            variable=['EASYRSA_PASSIN=pass:SuperJaime23'] #contraseña del docker
+            variable=['EASYRSA_PASSIN=pass:'] #contraseña del docker
             client.containers.run(image=imagen,command=commandoGenerar,volumes=volumenes,environment=variable,auto_remove=True)
             
             #comando equivalente a docker run -v hacker-machines-openvpn:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient username > username.ovpn
@@ -711,6 +712,7 @@ def registrarse(request):
             archivoOpenVpn.close()
 
             #guardamos en la base de datos
+            
             userCreated = User.objects.get(username=username)
             alumnoCreated = Alumno.objects.get(user=userCreated)
             alumnoCreated.openvpnFile = '/media/openvpn/'+urlRandom+'/'+username+'.ovpn'

@@ -6,9 +6,7 @@ from django.views.static import serve
 from django.urls import path,include,re_path
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
+
 
 
 
@@ -37,6 +35,8 @@ urlpatterns = [
     path('createAdminUser/<int:id>',views.createAdminUser, name='createAdminUser'), 
     path('deleteAdminUser/<int:id>',views.deleteAdminUser, name='deleteAdminUser'),
     path('deleteUser/<int:id>',views.deleteUser, name='deleteUser'), 
+
+
     path('reset_password/',
         auth_views.PasswordResetView.as_view(template_name="accounts/password_reset.html"),
         name="reset_password"),
@@ -53,9 +53,7 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password_reset_done.html"), 
         name="password_reset_complete"),
 
-    # path('password_reset/', auth_views.PasswordResetView.as_view(
-    #     html_email_template_name='registration/password_reset_html_email.html'
-    #     )),
+    
 
     path('admin/doc/', include('django.contrib.admindocs.urls')),
 

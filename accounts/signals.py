@@ -11,9 +11,3 @@ def create_profile(sender, instance, created, **kwargs):
     """Cuando se crea un usuario se manda una señal para que se cree también un modelo Alumno"""
     if created:
         Alumno.objects.create(user=instance)
-
-
-
-
-
-
