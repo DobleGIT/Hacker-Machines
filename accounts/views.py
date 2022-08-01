@@ -18,11 +18,9 @@ import docker, datetime, os
 from .forms import CreateUserForm, UserUpdateForm, AlumnoUpdateForm, AddCategoriesForm, AddMachinesForm
 from .decorators import unauthenticathed_user           #decorador creado para que si estas loggeado no puedas entrar a la pagina
 from .filters import UserFilter                         #filtro para buscar por usuarios
-<<<<<<< HEAD
-import time
-=======
 
->>>>>>> 93ebee5... final
+import time
+
 import random
 import string
 
@@ -185,14 +183,10 @@ def maquinas(request, nombre_maquina_url=None):
                     rest = actualTime - maquina_individual.reboot
                     rest = str(rest)
                     rest = rest.split(':')
-                    
-<<<<<<< HEAD
-                    if int(rest[1]) <1: #5 minutos tienen que pasar para volver a reiniciar la maquina
-                        messages.success(request, 'El reto ya se está reiniciando, por favor espera a que se despliegue la máquina')
-=======
+
                     if int(rest[1]) <5: #5 minutos tienen que pasar para volver a reiniciar la maquina
                         messages.success(request, 'El ya se está reiniciando, por favor espera a que se despliegue la máquina')
->>>>>>> 93ebee5... final
+
                     else:
                         maquina_individual.reboot = actualTime
                         maquina_individual.save()
