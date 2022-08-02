@@ -45,3 +45,6 @@ Finally we can run the application by executing the following command
 ```bash
 python3 manage.py runserver
 ```
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
